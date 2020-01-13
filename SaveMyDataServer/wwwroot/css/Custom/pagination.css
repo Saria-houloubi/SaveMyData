@@ -1,0 +1,8 @@
+﻿/*
+    The class once a link in the pagination bar is selected
+*/
+.pagination-selected {
+    
+    background-color: lightgray !important;
+}
+

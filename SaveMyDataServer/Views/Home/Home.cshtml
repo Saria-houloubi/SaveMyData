@@ -1,0 +1,58 @@
+﻿@model SaveMyDataServer.ViewModels.Home.IndexViewModel;
+@{
+    ViewData["Title"] = "Home Page";
+}
+@{
+    //IF the user is logged in add the user information
+    <div class="container-fluid text-center bg-light mt-5 ">
+        <div class="grid">
+            <div class="row">
+                <div class="col-1">
+                    <label class="col-form-label-lg">Id: </label>
+                </div>
+                <div class="col">
+                    <label class="col-form-label-lg text-info">@ViewBag.Id</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label class="col-form-label-lg">Name: </label>
+                </div>
+                <div class="col">
+                    <label class="col-form-label-lg text-info">@ViewBag.Name</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label class="col-form-label-lg">Email: </label>
+                </div>
+                <div class="col">
+                    <label class="col-form-label-lg text-info">@ViewBag.Email</label>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="container text-center mt-5">
+    <h1>Dashboard</h1>
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th>Database name</th>
+                <th>Creation data</th>
+                <th></th>
+            </tr>
+
+            @{
+                foreach (var item in Model.Databases)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.CreationDateUTC</td>
+                        <td><a class="btn btn-outline-info" href="/DataCenter/home?db=@item.Name" target="_blank">Show data</a></td>
+                    </tr>
+                }
+            }
+        </thead>
+    </table>
+</div>

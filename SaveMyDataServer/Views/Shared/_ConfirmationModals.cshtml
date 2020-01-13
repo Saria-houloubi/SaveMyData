@@ -1,0 +1,21 @@
+﻿<div class="modal bg-dark fade" id="delete-confirmation-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Please confirme the delete operation</h5>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">record Id</span>
+                    </div>
+                    <input type="text" class="form-control" id="delete-record-id" disabled />
+                </div>
+            </div>
+            <div class="modal-footer" id="edit-modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button class="btn btn-danger" onclick="deleteRecord(this)" id="delete-modal-btn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

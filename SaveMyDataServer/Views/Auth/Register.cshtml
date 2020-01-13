@@ -1,0 +1,27 @@
+﻿@model SaveMyDataServer.ViewModels.Auth.RegisterViewModel;
+
+<div class="container mt-5 text-center">
+           
+            <h1>Create Account</h1>
+            <form asp-controller="auth" asp-action="register" method="post">
+
+                <div class="form-group">
+                    <input type="text" placeholder="Full name" asp-for="@Model.Name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="date" asp-for="@Model.DOB" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Email" asp-for="@Model.Email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Password" asp-for="@Model.Password" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Confirm password" asp-for="@Model.ConfirmPassword" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-dark btn-block" value="Create" />
+                </div>
+            </form>
+</div>

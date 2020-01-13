@@ -1,0 +1,10 @@
+﻿/*
+	The sticky footer in the bottom 
+	works with dynamic html content
+*/
+footer {
+	position: absolute;
+	bottom: 0;
+	height: auto;
+	width: 100%;
+}

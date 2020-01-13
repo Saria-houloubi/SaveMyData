@@ -1,0 +1,19 @@
+﻿@import url("Custom/footer.css");
+@import url("Custom/pagination.css");
+@import url("Custom//grid.css");
+@import url("Custom//button.css");
+/*
+	The top continer of the page
+	so to push put the footer in and push it to the bottom
+*/
+#hole-page-container {
+    position: relative;
+    min-height: 100vh;
+}
+
+.backgroud-image-box {
+    background-image: url("../Images/bg-box-min.jpg");
+    background-size: cover;
+    width: 98vw;
+    height: 100vh;
+}
