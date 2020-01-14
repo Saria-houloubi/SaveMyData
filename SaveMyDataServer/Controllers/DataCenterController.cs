@@ -113,7 +113,7 @@ namespace SaveMyDataServer.Controllers
                 switch (type)
                 {
                     case SupportedExportFileTypes.Excel:
-                        return File(ExcelService.CreateExcelFile("Test", data), "application/vnd.ms-excel");
+                        return File(ExcelService.CreateExcelFile($"{table}-{database}", data), "application/vnd.ms-excel", $"{table}-{database}-{DateTime.UtcNow.ToString("dd_MM_yyyy")}.xls");
                     default:
                         return BadRequest(ErrorMessages.InvalidData);
                 }

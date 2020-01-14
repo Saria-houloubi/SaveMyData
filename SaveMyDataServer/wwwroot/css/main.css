@@ -2,13 +2,17 @@
 @import url("Custom/pagination.css");
 @import url("Custom//grid.css");
 @import url("Custom//button.css");
+
+html, body {
+    height: 100%;
+}
 /*
 	The top continer of the page
 	so to push put the footer in and push it to the bottom
 */
 #hole-page-container {
-    position: relative;
     min-height: 100vh;
+    padding-bottom: 30px;
 }
 
 .backgroud-image-box {
