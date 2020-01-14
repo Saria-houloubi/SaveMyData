@@ -13,6 +13,12 @@ namespace SaveMyDataServer.Core.Services
     /// </summary>
     public class AuthUserService : IAuthUserService
     {
+        #region Properties
+        /// <summary>
+        /// The name of the hosting server
+        /// </summary>
+        public const string ServerName = "savemydata.sariahouloubi.com";//https://localhost:5001
+        #endregion
         #region Services
         /// <summary>
         /// The database Access layer
@@ -56,7 +62,7 @@ namespace SaveMyDataServer.Core.Services
                 await MailService.SendEmail(new Models.EmailModel
                 {
                     ContentHTML = $"<h1>Thank you for registering with save my data</h1><p>To keep our data clean we need you to confirm your " +
-                    $"email by clicking <a href=https://localhost:5001/auth/emailconfirmaiton?id={user.Id}&id2={user.ConfirmMailId}>here</a>" +
+                    $"email by clicking <a href={ServerName}/auth/emailconfirmaiton?id={user.Id}&id2={user.ConfirmMailId}>here</a>" +
                     $"<h5>Welcome to Save my data!</h5>",
                     Subject = "Email confirmation",
                     UserEmail = user.Email,

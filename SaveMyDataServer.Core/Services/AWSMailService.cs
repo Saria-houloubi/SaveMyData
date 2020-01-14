@@ -23,9 +23,11 @@ namespace SaveMyDataServer.Core.Services
                 message.Subject = emailModel.Subject;
 
                 //Create the body of the eamil
-                var bodyBuilder = new BodyBuilder();
-                bodyBuilder.HtmlBody = emailModel.ContentHTML;
-                bodyBuilder.TextBody = emailModel.Content;
+                var bodyBuilder = new BodyBuilder
+                {
+                    HtmlBody = emailModel.ContentHTML,
+                    TextBody = emailModel.Content
+                };
                 message.Body = bodyBuilder.ToMessageBody();
 
                 using (var client = new SmtpClient())
