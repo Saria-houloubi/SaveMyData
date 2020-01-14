@@ -7,7 +7,7 @@ While I was helping a friend with a project of his which consists of simple HTML
 Nor did I like them and wanted to help so I create a service which makes storing, reading, editing and exporting data fast, easy and secure.
 
 ## The Concept
-Save my data exposes Restful API endpoints on which its takes any structure of data in JSON fromat from the user and creates the database and tables using MongoDb and from there the user can do any CRUD opperations on them.<br/>which can be done also in the main web page with the abilty to export the data on the go to Excel, CSV and much more that are being added.
+Save my data exposes Restful API endpoints on which its takes any structure of data in JSON fromat from the user and creates the database and tables using MongoDb and from there the user can do any CRUD operations on them.<br/>which can be done also in the main web page with the ability to export the data on the go to Excel, CSV and much more that are being added.
 
 ## API-End Points
 Since the project is not yet in production phase I will wait until everything is ready to document them.<br/>
