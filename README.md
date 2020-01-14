@@ -3,7 +3,7 @@
 
 
 ## Motivation
-While I was helping a friend with a project of his which consists of simple HTML/CSS and some javascript to create a page for collecting some survey data, He wanted to save the data he collected in some way but dose not want to get too technical with all the database stuff nor wants to pay for any service so after he tryed some simple ways which solved parts of the problem but non of them he ended up liking.<br/>
+While I was helping a friend with a project of his which consists of simple HTML/CSS and some javascript to create a page for collecting some survey data, He wanted to save the data he collected in some way but dose not want to get too technical with all the database stuff nor wants to pay for any service so after he tried some simple ways which solved parts of the problem but non of them he ended up liking.<br/>
 Nor did I like them and wanted to help so I create a service which makes storing, reading, editing and exporting data fast, easy and secure.
 
 ## The Concept
