@@ -2,23 +2,21 @@
     ViewData["title"] = "Save my data";
 }
 
-<div class="backgroud-image-box mx-auto">
-    <div class="containter bg-light py-5 my-auto text-center">
-        <h1 class="display-1 text-center font-weight-bold text-dark">Save, Edit, Read and Export!!</h1>
-        <p class="lead font-weight-normal m-5 text-center">
-            A quick and easy way to create your database, write, read any data type or shape you want Export your data into your favorite files such as Excel!.
-        </p>
-        <hr />
-        @{
-            if (!User.Identity.IsAuthenticated)
-            {
-                <a class="btn btn-light ml-1  btn-lg" href="@SaveMyDataServer.Static.ServerRedirectsURLs.Login">Login</a>
-            }
+<div class="containter bg-light py-5 my-auto text-center">
+    <h1 class="display-1 text-center font-weight-bold text-dark">Save, Edit, Read and Export!!</h1>
+    <p class="lead font-weight-normal m-5 text-center">
+        A quick and easy way to create your database, write, read any data type or shape you want Export your data into your favorite files such as Excel!.
+    </p>
+    <hr />
+    @{
+        if (!User.Identity.IsAuthenticated)
+        {
+            <a class="btn btn-light ml-1  btn-lg" href="@SaveMyDataServer.Static.ServerRedirectsURLs.Login">Login</a>
         }
-        <a class="btn btn-light mx-1 btn-lg" href="@SaveMyDataServer.Static.ServerRedirectsURLs.Guid">Guid</a>
-        <a class="btn btn-light  btn-lg" href="@SaveMyDataServer.Static.ServerRedirectsURLs.Contact">Contact</a>
-        <hr />
+    }
+    <a class="btn btn-light mx-1 btn-lg" href="@SaveMyDataServer.Static.ServerRedirectsURLs.Guid">Guid</a>
+    <a class="btn btn-light  btn-lg" href="@SaveMyDataServer.Static.ServerRedirectsURLs.Contact">Contact</a>
+    <hr />
 
-        <p class="mt-5">As a big belivers of open-source software you can find the code on <a target="_blank" href="https://github.com/Saria-houloubi/SaveMyData">github</a>.</p>
-    </div>
+    <p class="mt-5">As a big belivers of open-source software you can find the code on <a target="_blank" href="https://github.com/Saria-houloubi/SaveMyData">github</a>.</p>
 </div>

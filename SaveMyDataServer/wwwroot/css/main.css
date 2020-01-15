@@ -15,9 +15,3 @@ html, body {
     padding-bottom: 30px;
 }
 
-.backgroud-image-box {
-    background-image: url("../Images/bg-box-min.jpg");
-    background-size: cover;
-    width: 98vw;
-    height: 100vh;
-}
