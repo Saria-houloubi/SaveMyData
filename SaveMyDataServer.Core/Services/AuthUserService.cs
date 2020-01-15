@@ -39,13 +39,13 @@ namespace SaveMyDataServer.Core.Services
             //Assign the injected value
             DatabaseService = databaseService;
             MailService = mailService;
-            //Set to the main database until a user sends the database name
-            DatabaseService.InitilizeDatabase(DatabaseNames.Main);
-
+            
         }
         #endregion
         public async Task<UserModel> Register(string fullName, string email, string password, DateTime DOB)
         {
+            //Set to the main database until a user sends the database name
+            DatabaseService.InitilizeDatabase(DatabaseNames.Main);
             //Try to add the user into the database
             var user = await DatabaseService.AddRecord<UserModel>(new UserModel
             {
@@ -79,6 +79,8 @@ namespace SaveMyDataServer.Core.Services
 
         public async Task<UserModel> ConfirmUserPassword(string email, string passowrd)
         {
+            //Set to the main database until a user sends the database name
+            DatabaseService.InitilizeDatabase(DatabaseNames.Main);
             //Get the user from the database
             var user = await DatabaseService.GetRecord<UserModel>(MongoTableBaseFieldNames.Email, email, DatabaseTableNames.Users);
             //If the email is not vaild or the user provided the wrong password then just return false
@@ -91,6 +93,8 @@ namespace SaveMyDataServer.Core.Services
 
         public async Task<UserModel> ConfirmUserEmail(Guid id, Guid mailId)
         {
+            //Set to the main database until a user sends the database name
+            DatabaseService.InitilizeDatabase(DatabaseNames.Main);
             //Get the user from the database
             var user = await DatabaseService.GetRecord<UserModel>(MongoTableBaseFieldNames.Id, id, DatabaseTableNames.Users);
 
