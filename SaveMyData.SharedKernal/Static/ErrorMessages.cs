@@ -13,5 +13,6 @@ namespace SaveMyDataServer.SharedKernal.Static
         public static string MissingData = "Some importent data is missing from the request";
         public static string DuplicateEmail = "The email you used has already an account connected to it";
         public static string LoginFail = "Email or password is incorrect please check and try again";
+        public static string EmailNotConfirmed = "Email is not confirmed please check your inbox";
     }
 }

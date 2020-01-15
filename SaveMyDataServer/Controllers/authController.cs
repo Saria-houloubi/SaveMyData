@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
-using SaveMyDataServer.SharedKernal.Static;
 using SaveMyDataServer.Controllers.Base;
 using SaveMyDataServer.Core.IServices;
+using SaveMyDataServer.SharedKernal.Static;
 using SaveMyDataServer.Static;
 using SaveMyDataServer.ViewModels.Auth;
 using System;
@@ -138,7 +138,12 @@ namespace SaveMyDataServer.Controllers
                 SetViewBagErrorMessage(ErrorMessages.LoginFail);
                 return View(model);
             }
-
+            if (!user.IsMailConfirmed)
+            {
+                //Set the error message
+                SetViewBagErrorMessage(ErrorMessages.EmailNotConfirmed);
+                return View(model);
+            }
 
             //Create the user claims
             var claims = new List<Claim>
@@ -205,7 +210,7 @@ namespace SaveMyDataServer.Controllers
             //redirect to login page
             return Redirect(ServerRedirectsURLs.Login);
         }
-        
+
         #endregion
     }
 }

@@ -66,6 +66,11 @@ namespace SaveMyDataServer.Controllers.APIs
                 model.ErrorMessage = ErrorMessages.LoginFail;
                 return StatusCode(StatusCodes.Status401Unauthorized, model);
             }
+            //Check if the user has confirmed his/her email
+            if (!user.IsMailConfirmed)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, ErrorMessages.EmailNotConfirmed);
+            }
 
             //Create the response object
             var response = new UserAPIModel
