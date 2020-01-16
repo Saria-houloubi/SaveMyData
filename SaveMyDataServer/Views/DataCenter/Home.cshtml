@@ -92,7 +92,7 @@
     // type: the type to export the data for
     //
     function exportData(element, type) {
-        location.href = '/DataCenter/ExportData?table=' + document.getElementById('selected-table-title').innerText +'&database=' + workingDatabase +'&type='+ type;
+        location.href = '@SaveMyDataServer.Static.ServerRedirectsURLs.ExportData'+'?table=' + document.getElementById('selected-table-title').innerText +'&database=' + workingDatabase +'&type='+ type;
         return false;
     }
 </script>

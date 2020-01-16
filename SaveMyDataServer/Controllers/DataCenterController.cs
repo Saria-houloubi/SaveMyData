@@ -143,8 +143,10 @@ namespace SaveMyDataServer.Controllers
 
             try
             {
+                //Convert the data into a bson object
+                var bsonData = BsonDocument.Parse(model.Data);
                 //Try to add the record
-                var record = await MongoCollectionService.EditHoleRecordById(BsonDocument.Parse(model.Data), model.Id, model.Table, $"{UniqueDatabaseName(model.Database)}");
+                var record = await MongoCollectionService.EditHoleRecordById(bsonData, model.Id, model.Table, $"{UniqueDatabaseName(model.Database)}");
 
                 return Ok(record);
             }

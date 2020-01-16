@@ -1,7 +1,6 @@
 ﻿
 //The table the user has selected to show
 var selectedTable = "";
-
 //
 //Initializes the the table once it is selectd
 //
@@ -18,7 +17,6 @@ function initializeTable() {
     //Load the table data
     getTableData(1);
 }
-
 //
 //Gets the data that is saved in the selected table 100 element at a time
 //
@@ -73,7 +71,6 @@ function createFormFiledValueRow(field, value) {
 
     return row;
 }
-
 //
 //Creates a bootstrap spinner div
 // text_info : is the color of the spinner
@@ -105,7 +102,6 @@ function bindEditButtonModel() {
         $(linkParent).bind('click', showEditModal);
     }
 }
-
 //
 //Shows the edit modal and fills it with information
 // element: the DOM elemen that sent the request
@@ -123,7 +119,6 @@ function showEditModal(element) {
     //Show the model to the user
     $("#edit-record-modal").modal('show');
 }
-
 //
 //Moves a table row to agrid key value pair
 // grid: the grid to set the data in
@@ -224,7 +219,6 @@ function deleteRecord(element) {
         $(element).removeClass('disabled');
     });
 }
-
 //
 //Edits a record in the database
 //
@@ -261,10 +255,11 @@ function editRecord(element) {
             },
             method: 'PUT',
             success: function (data, status, jqXHR) {
-                //Remove the row from the grid
-                //document.getElementsByClassName('selected-row')[0].remove();
+                //Reupdate the table content
+                getTableData(document.getElementsByClassName('pagination-selected')[0].innerText);
                 //Hide the model from the user
                 $('#edit-record-modal').modal('hide');
+
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert(errorThrown);
