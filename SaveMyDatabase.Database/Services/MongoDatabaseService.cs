@@ -8,6 +8,7 @@ using SaveMyDataServer.SharedKernal.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace SaveMyDataServer.Database.Services
@@ -93,6 +94,11 @@ namespace SaveMyDataServer.Database.Services
             var data = await collection.Find(filters ?? new BsonDocument()).ToListAsync<T>();
             //If the count of data that we want is given then only get that amount
             return pagination == null ? data : data.Skip((pagination.CurrentPage - 1) * pagination.FetchRecordCount).Take(pagination.FetchRecordCount).ToList();
+        }
+        public async Task<long> GetRecordsCount<T>(string table, Expression<Func<T, bool>> filter)
+        {
+            //Get the collection from the database
+            return await MongoDatabase.GetCollection<T>(table).CountDocumentsAsync<T>(filter);
         }
 
 

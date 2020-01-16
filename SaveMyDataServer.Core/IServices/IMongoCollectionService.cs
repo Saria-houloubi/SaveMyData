@@ -1,6 +1,8 @@
 ﻿using MongoDB.Driver;
 using SaveMyDataServer.SharedKernal.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace SaveMyDataServer.Core.IServices
@@ -37,6 +39,17 @@ namespace SaveMyDataServer.Core.IServices
         /// <param name="pagination">The pagination information to skip and take</param>
         /// <returns></returns>
         Task<List<T>> GetCollection<T>(string table, string database, PaginationModel pagination = null);
+
+        /// <summary>
+        /// Gets the count of records in a table
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="table"></param>
+        /// <param name="database"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        Task<long> GetCollectionCount<T>(string table, string database,Expression<Func<T,bool>> filter);
+
         /// <summary>
         /// Overloaded method for getCollection with filtering abilties
         /// </summary>

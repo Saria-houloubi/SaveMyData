@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SaveMyDataServer.SharedKernal
+﻿namespace SaveMyDataServer.SharedKernal
 {
     /// <summary>
     /// A base filed names for some tabels
@@ -12,5 +8,7 @@ namespace SaveMyDataServer.SharedKernal
         public static string Id = "_id";
         public static string Email = "Email";
         public static string Name = "name";
+        public static string UserId = "UserId";
+
     }
 }

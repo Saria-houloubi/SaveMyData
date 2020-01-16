@@ -35,7 +35,14 @@ namespace SaveMyDataServer.Helpers
             return htmlTable;
         }
 
-
+        /// <summary>
+        /// Creates an expandalbe custom row
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="rowId"></param>
+        /// <param name="isCollapse"></param>
+        /// <param name="enableEdit"></param>
+        /// <returns></returns>
         public static string CreateExpandableTableRow(BsonDocument element, string rowId, bool isCollapse = false, bool enableEdit = true)
         {
             //Check if the row has any classes
@@ -77,6 +84,46 @@ namespace SaveMyDataServer.Helpers
             //Add the expandation at the end
             row = string.Concat(row, rowExpander);
             return row;
+        }
+
+
+        /// <summary>
+        /// Creates an HTML table 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="records">The records to fill the table with</param>
+        /// <param name="columns">The column names for the records</param>
+        /// <returns></returns>
+        public static string CreateTable<T>(List<T> records, string[] columns)
+        {
+            //Create the first tag for the table
+            string htmlTable = "<table class=\"table\"><thead class='thead-light'><tr>";
+            //Add the table columns
+            foreach (var col in columns)
+            {
+                htmlTable = string.Concat(htmlTable, $"<td>{col}</td>");
+            }
+            //Close the row
+            htmlTable = string.Concat(htmlTable, $"</tr></thead>");
+            //Get the sent type properties
+            var typeProperties = typeof(T).GetProperties();
+            //add the rows
+            foreach (var item in records)
+            {
+                //Create the row
+                htmlTable = string.Concat(htmlTable, $"<tr>");
+                //Loop throw the object properties
+                foreach (var prop in typeProperties)
+                {
+                    //Get the property value
+                    htmlTable = string.Concat(htmlTable, "<td>", prop.GetValue(item, null), "</td>");
+                }
+                htmlTable = string.Concat(htmlTable, $"</tr>");
+            }
+            //Close the table
+            htmlTable = string.Concat(htmlTable, $"</table>");
+
+            return htmlTable;
         }
     }
 }

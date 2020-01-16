@@ -2,7 +2,9 @@
 using SaveMyDataServer.Core.IServices;
 using SaveMyDataServer.Database.IServices;
 using SaveMyDataServer.SharedKernal.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace SaveMyDataServer.Core.Services
@@ -61,6 +63,13 @@ namespace SaveMyDataServer.Core.Services
             DatabaseService.InitilizeDatabase(database);
 
             return await DatabaseService.GetRecords<T>(table, pagination: pagination);
+        }
+        public async Task<long> GetCollectionCount<T>(string table, string database, Expression<Func<T, bool>> filter)
+        {
+            //Connect to the wanted database
+            DatabaseService.InitilizeDatabase(database);
+
+            return await DatabaseService.GetRecordsCount<T>(table, filter);
         }
         public async Task<T> DeleteRecordById<T>(string id, string table, string database)
         {

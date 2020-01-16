@@ -36,7 +36,7 @@ function getTableData(pageNumber) {
             bindEditButtonModel();
         }
     ).fail(function (error) {
-        showAlertMessage(error.responseText, true);
+        setTopPageAlertMessage(error.responseText, 'alert-danger');
     });
 }
 //
@@ -184,7 +184,7 @@ function deleteRecord(element) {
                     counter.innerText = parseInt(counter.innerText, 10) - 1;
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    alert(errorThrown);
+                    setTopPageAlertMessage(errorThrown, 'alert-danger');
                 }
             }
         ).always(function () {
@@ -228,7 +228,7 @@ function editRecord(element) {
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    alert(errorThrown);
+                    setTopPageAlertMessage(errorThrown, 'alert-danger');
                 }
             }
         ).always(function () {

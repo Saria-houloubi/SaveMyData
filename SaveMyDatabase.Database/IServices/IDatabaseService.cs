@@ -2,6 +2,7 @@
 using SaveMyDataServer.SharedKernal.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace SaveMyDataServer.Database.IServices
@@ -48,6 +49,15 @@ namespace SaveMyDataServer.Database.IServices
         /// <param name="pagination">The pagination information to skip and take</param>
         /// <returns></returns>
         Task<List<T>> GetRecords<T>(string table, FilterDefinition<T> filters = null, PaginationModel pagination = null);
+        /// <summary>
+        /// Get the count of records in some table
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="table">The table to get the count from</param>
+        /// <param name="filter">if want to filter spacific records</param>
+        /// <returns></returns>
+        Task<long> GetRecordsCount<T>(string table, Expression<Func<T, bool>> filter);
+
         /// <summary>
         /// Gets the table names and row count that for each table in the connected database
         /// </summary>
