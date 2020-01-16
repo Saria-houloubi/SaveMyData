@@ -5,6 +5,48 @@
 }
 
 <div class="container-fluid mt-5 text-center bg-light py-5">
-    <h1 class="text-dark">Thank you for registering plase<br>confirm your email</h1>
-    <img style="max-width: 20%" src="/Images/mail.svg" />
+    <div class="grid">
+        <div class="row">
+            <span class="text-info display-4 col my-auto text-monospace">Thank you for registering plase<br>confirm your email</span>
+            <img class="col" style="max-width: 350px;" src="~/Images/smiley-done.svg" />
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <input class="form-control text-center" type="email" value="@Model.Email" id="user-email-resend" placeholder="example@email.com">
+                </div>
+                <div class="form-group">
+                    <button class="text-center btn btn-outline-info d-inline" onclick="sendEmailConfirmation(this)" type="button">Resend</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<script src="~/js/Custom/spinners.js" type="text/javascript"></script>
+<script>
+    //
+    //Send a user confirmation email
+    // email: the user email to sent it to
+    //
+    function sendEmailConfirmation(element) {
+        //Create the spinner
+        var loadingSpinner = disableAndShowSpinner(element, 'text-info');
+        //Check if the request has already been sent
+        if (loadingSpinner !== null) {
+            $.ajax(
+                '@SaveMyDataServer.Static.ServerAjaxURLs.EmailConfirmation', {
+                    data: { email: document.getElementById('user-email-resend').value},
+                    method: 'POST',
+                    success: function (result) {
+                        setTopPageAlertMessage(result,'alert-success');
+                    },
+                    error: function (error) {
+                        setTopPageAlertMessage(error.responseText, 'alert-danger');
+                    },
+                }
+            ).always(function () {
+                enableAndHideSpinner(element,loadingSpinner)
+            })
+        }
+    }
+</script>

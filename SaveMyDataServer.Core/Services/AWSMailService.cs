@@ -42,7 +42,7 @@ namespace SaveMyDataServer.Core.Services
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

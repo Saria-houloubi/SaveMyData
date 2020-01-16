@@ -34,5 +34,12 @@ namespace SaveMyDataServer.Core.IServices
         /// <returns></returns>
         Task<UserModel> ConfirmUserEmail(Guid id,Guid sentMail);
 
+        /// <summary>
+        /// Send an email to the user to confirm that it is not a spam emai;
+        /// </summary>
+        /// <param name="userEmail">The email of the user</param>
+        /// <returns></returns>
+        Task<UserModel> SendConfirmationEmail(string userEmail);
+
     }
 }

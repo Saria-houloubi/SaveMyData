@@ -17,7 +17,6 @@
         public const string EmailAuth = "/auth/emailauth";
         
 
-        public const string ExportData= "/datacenter/exportData";
 
 
     }

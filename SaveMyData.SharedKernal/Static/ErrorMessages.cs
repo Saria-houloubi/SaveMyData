@@ -14,5 +14,6 @@ namespace SaveMyDataServer.SharedKernal.Static
         public static string DuplicateEmail = "The email you used has already an account connected to it";
         public static string LoginFail = "Email or password is incorrect please check and try again";
         public static string EmailNotConfirmed = "Email is not confirmed please check your inbox";
+        public static string EmailNotSent = "Can not send an email to the wanted address due to invalid data plase check and try again";
     }
 }

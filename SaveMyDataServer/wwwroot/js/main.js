@@ -2,29 +2,31 @@
 // The main.js file holds refrence to all the javascript files
 //
 
-//
-//Show an error alert box in the top of the page
-// message: message to put in the alert
-// isError: a flag to check if the message is an error show it in alert-danger
-//
-function showAlertMessage(message, isError) {
-    //Get the top message part to show alert to the user
-    var navbar = document.getElementById("top-page-messages-part");
-    //Check wither the message is an error or a sucess message
-    if (isError)
-        navbar.innerHTML = '<div class="alert alert-danger text-center m-4" role="alert">' + message + '</div>';
-    else
-        navbar.innerHTML = '<div class="alert alert-success text-center m-4" role="alert">' + message + '</div>';
-}
 
-function getLoadingGrowingSpinner() {
-    return '<div class="d-flex justify-content-center m-5">'
-        + '<div class="spinner-grow" role="status">'
-        + '<span class="sr-only"> Loading...</span>'
-        + '</div>'
-        + '</div>';
-}
+//
+//Sets a top page alert message for an ajax request to give information to the user
+// message : the message to show the user in
+// background : the background of the alert box
+// alertTime : the time to keep the alert shown to the use in miliseconds
+//
+function setTopPageAlertMessage(message, background, alertTime = 5000) {
+    //Get the top message div in the layout
+    var topMessageAlertDiv = document.getElementById('top-page-messages-part');
+    //create the alert box
+    var alertDiv = document.createElement('div');
+    //add the needed classs
+    alertDiv.classList.add('alert', 'text-center', 'm-4', background);
+    alertDiv.setAttribute('role', 'alert');
+    //Set the message
+    alertDiv.innerText = message;
+    //Show the alert to the user
+    topMessageAlertDiv.appendChild(alertDiv);
+    //Hid the alert after the sent alertTime
+    setTimeout(function () {
+        alertDiv.remove();
+    }, alertTime);
 
+}
 //
 //Unflattens a string seperated with a dot to a json object
 // main : the old json object assign the values to

@@ -6,5 +6,9 @@
     public static class ServerAjaxURLs
     {
         public const string GetCollectionTabble = "/DataCenter/GetTableData";
+        public const string ExportData =          "/Datacenter/exportData";
+
+
+        public const string EmailConfirmation = "/Auth/EmailConfirmation";
     }
 }

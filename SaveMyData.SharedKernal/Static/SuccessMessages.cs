@@ -6,5 +6,6 @@
     public static class SuccessMessages
     {
         public const string EmailConfirmed = "Your email has been confirmed!";
+        public const string EmailSent = "Confirmation email has been sent!";
     }
 }

@@ -39,7 +39,7 @@ namespace SaveMyDataServer.Core.Services
             //Assign the injected value
             DatabaseService = databaseService;
             MailService = mailService;
-            
+
         }
         #endregion
         public async Task<UserModel> Register(string fullName, string email, string password, DateTime DOB)
@@ -57,26 +57,39 @@ namespace SaveMyDataServer.Core.Services
                 IsMailConfirmed = false
             }, DatabaseTableNames.Users);
 
-            try
-            {
-                await MailService.SendEmail(new Models.EmailModel
-                {
-                    ContentHTML = $"<h1>Thank you for registering with save my data</h1><p>To keep our data clean we need you to confirm your " +
-                    $"email by clicking <a href={ServerName}/auth/emailconfirmaiton?id={user.Id}&id2={user.ConfirmMailId}>here</a>" +
-                    $"<h5>Welcome to Save my data!</h5>",
-                    Subject = "Email confirmation",
-                    UserEmail = user.Email,
-                    UserFullName = user.FullName
-                });
-            }
-            catch (Exception ex)
-            {
-                //LOG result in
-                Console.Error.Write(ex.Message);
-            }
+            //Send the confirmation emial to the user
+            await SendConfirmationEmail(user.Email);
+
             return user;
         }
 
+        public async Task<UserModel> SendConfirmationEmail(string userEmail)
+        {
+            //Set to the main database until a user sends the database name
+            DatabaseService.InitilizeDatabase(DatabaseNames.Main);
+
+            //Get the user from the database to make sure that it has been registerd
+            var user = await DatabaseService.GetRecord<UserModel>(MongoTableBaseFieldNames.Email, userEmail, DatabaseTableNames.Users);
+            //If the user is found
+            if (user != null)
+            {
+                //Check if the email has not yet been confirmed
+                if (!user.IsMailConfirmed)
+                {
+                    await MailService.SendEmail(new Models.EmailModel
+                    {
+                        ContentHTML = $"<h1>Thank you for registering with save my data</h1><p>To keep our data clean we need you to confirm your " +
+                        $"email by clicking <a href={ServerName}/auth/emailconfirmaiton?id={user.Id}&id2={user.ConfirmMailId}>here</a>" +
+                        $"<h5>Welcome to Save my data!</h5>",
+                        Subject = "Email confirmation",
+                        UserEmail = user.Email,
+                        UserFullName = user.FullName
+                    });
+                }
+            }
+
+            return user;
+        }
         public async Task<UserModel> ConfirmUserPassword(string email, string passowrd)
         {
             //Set to the main database until a user sends the database name

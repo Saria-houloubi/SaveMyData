@@ -1,5 +1,4 @@
-﻿
-//The table the user has selected to show
+﻿//The table the user has selected to show
 var selectedTable = "";
 //
 //Initializes the the table once it is selectd
@@ -71,23 +70,7 @@ function createFormFiledValueRow(field, value) {
 
     return row;
 }
-//
-//Creates a bootstrap spinner div
-// text_info : is the color of the spinner
-//
-function createSpinnerElement(text_info) {
-    //Create the div element
-    var spinner = document.createElement('div');
-    //Add the needed classes
-    spinner.classList.add('spinner-border', text_info);
-    //Optional screen reader for acciblity
-    var screenReader = document.createElement('span');
-    screenReader.classList.add('sr-only');
-    screenReader.innerText = 'loading...';
-    //Add the screen reader to the spinner div
-    spinner.appendChild(screenReader);
-    return spinner;
-}
+
 //
 //The function that bind the edit button to the model
 //
@@ -177,99 +160,81 @@ function askConfirmation() {
 // element: the delete button to disable untile the server response is given
 //
 function deleteRecord(element) {
-    //Hide this model
-    $('#delete-confirmation-modal').modal('hide');
-    //if the element is already disabled do not do anything
-    if ($(element).hasClass('disabled')) {
-        return;
-    }
-    //set the elment into disabled
-    $(element).addClass('disabled');
     //Create the spinner
-    var loadingSpinner = createSpinnerElement('text-danger');
-    //Show the loading elemnt to the user
-    element.parentElement.appendChild(loadingSpinner);
+    var loadingSpinner = disableAndShowSpinner(element, 'text-danger');
 
-    //Send the delete request
-    $.ajax(
-        '/datacenter/record', {
-            data: {
-                Id: document.getElementById('record-id').value,
-                Table: document.getElementById('record-table-name').value,
-                Database: document.getElementById('record-database-name').value
-            },
-            method: 'DELETE',
-            success: function (data, status, jqXHR) {
-                //Remove the row from the grid
-                document.getElementsByClassName('selected-row')[0].remove();
-                //Hide the model from the user
-                $('#edit-record-modal').modal('hide');
+    if (loadingSpinner !== null) {
+        //Send the delete request
+        $.ajax(
+            '/datacenter/record', {
+                data: {
+                    Id: document.getElementById('record-id').value,
+                    Table: document.getElementById('record-table-name').value,
+                    Database: document.getElementById('record-database-name').value
+                },
+                method: 'DELETE',
+                success: function (data, status, jqXHR) {
+                    //Remove the row from the grid
+                    document.getElementsByClassName('selected-row')[0].remove();
+                    //Hide the model from the user
+                    $('#edit-record-modal').modal('hide');
 
-                //decrement the table row count
-                var counter = document.getElementById(document.getElementById('record-table-name').value + '-count');
-                counter.innerText = parseInt(counter.innerText, 10) - 1;
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(errorThrown);
+                    //decrement the table row count
+                    var counter = document.getElementById(document.getElementById('record-table-name').value + '-count');
+                    counter.innerText = parseInt(counter.innerText, 10) - 1;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
             }
-        }
-    ).always(function () {
-        loadingSpinner.remove();
-        //set the elment into disabled
-        $(element).removeClass('disabled');
-    });
+        ).always(function () {
+            enableAndHideSpinner(element, loadingSpinner);
+        });
+    }
 }
 //
 //Edits a record in the database
 //
 function editRecord(element) {
-    //if the element is already disabled do not do anything
-    if ($(element).hasClass('disabled')) {
-        return;
-    }
-    //set the elment into disabled
-    $(element).addClass('disabled');
     //Create the spinner
-    var loadingSpinner = createSpinnerElement('text-info');
-    //Show the loading elemnt to the user
-    element.parentElement.appendChild(loadingSpinner);
+    var loadingSpinner = disableAndShowSpinner(element, 'text-info');
+    if (loadingSpinner !== null) {
 
-    //Ready up the data part
-    //Get the grid modal
-    var grid = document.getElementById('edit-record-modal-body-grid');
-    //The data object that will hold the values
-    var jsonData = {};
-    //Loop throw the grid items and add the key value pair
-    for (var i = 0; i < grid.children.length; i++) {
-        var elementGrid = grid.children[i];
-        unflattenJSON(jsonData, elementGrid.getElementsByClassName('input-group-text')[0].innerText.split('.').reverse(), elementGrid.getElementsByClassName('form-control')[0].value);
-    }
-    //Send the delete request
-    $.ajax(
-        '/datacenter/record', {
-            data: {
-                Id: document.getElementById('record-id').value,
-                Table: document.getElementById('record-table-name').value,
-                Database: document.getElementById('record-database-name').value,
-                data: JSON.stringify(jsonData)
-            },
-            method: 'PUT',
-            success: function (data, status, jqXHR) {
-                //Reupdate the table content
-                getTableData(document.getElementsByClassName('pagination-selected')[0].innerText);
-                //Hide the model from the user
-                $('#edit-record-modal').modal('hide');
-
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(errorThrown);
-            }
+        //Ready up the data part
+        //Get the grid modal
+        var grid = document.getElementById('edit-record-modal-body-grid');
+        //The data object that will hold the values
+        var jsonData = {};
+        //Loop throw the grid items and add the key value pair
+        for (var i = 0; i < grid.children.length; i++) {
+            var elementGrid = grid.children[i];
+            unflattenJSON(jsonData, elementGrid.getElementsByClassName('input-group-text')[0].innerText.split('.').reverse(), elementGrid.getElementsByClassName('form-control')[0].value);
         }
-    ).always(function () {
-        loadingSpinner.remove();
-        //set the elment into disabled
-        $(element).toggleClass('disabled');
-    });
+        //Send the delete request
+        $.ajax(
+            '/datacenter/record', {
+                data: {
+                    Id: document.getElementById('record-id').value,
+                    Table: document.getElementById('record-table-name').value,
+                    Database: document.getElementById('record-database-name').value,
+                    data: JSON.stringify(jsonData)
+                },
+                method: 'PUT',
+                success: function (data, status, jqXHR) {
+                    //Reupdate the table content
+                    getTableData(document.getElementsByClassName('pagination-selected')[0].innerText);
+                    //Hide the model from the user
+                    $('#edit-record-modal').modal('hide');
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            }
+        ).always(function () {
+            enableAndHideSpinner(element, loadingSpinner);
+        });
+    }
 }
 
 

@@ -9,5 +9,8 @@
         public const string ErrorMessage = "ErrorMessage";
         public const string SucessMessage = "SucessMessage";
 
+
+        public const string Email = "Email";
+
     }
 }

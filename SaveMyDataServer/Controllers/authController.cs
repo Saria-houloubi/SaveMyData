@@ -26,6 +26,10 @@ namespace SaveMyDataServer.Controllers
         /// The service to work with authintication a user
         /// </summary>
         public IAuthUserService AuthUserService { get; set; }
+        /// <summary>
+        /// The mail service layer
+        /// </summary>
+        public IMailService MailService { get; set; }
 
         #endregion
 
@@ -33,9 +37,10 @@ namespace SaveMyDataServer.Controllers
         /// <summary>
         /// Default constructer
         /// </summary>
-        public AuthController(IAuthUserService authUserService)
+        public AuthController(IAuthUserService authUserService, IMailService mailService)
         {
             AuthUserService = authUserService;
+            MailService = mailService;
         }
         #endregion
 
@@ -75,7 +80,18 @@ namespace SaveMyDataServer.Controllers
         /// <returns></returns>
         public IActionResult EmailAuth()
         {
-            return View();
+            //The email the user regiterd in
+            var registerEmail = "";
+            //Check if the we have been redirected from the register controller
+            if (TempData.TryGetValue(TempDataDictionaryKeys.Email, out object email))
+            {
+                //Set the email the user registerd in
+                registerEmail = email.ToString();
+            }
+            return View(new RegisterViewModel
+            {
+                Email = registerEmail
+            });
         }
         /// <summary>
         /// Confirms a user email
@@ -109,6 +125,19 @@ namespace SaveMyDataServer.Controllers
 
                 return RedirectWithMessage(ServerRedirectsURLs.EmailAuth, ex.Message, true);
             }
+        }
+        /// <summary>
+        /// Logs the user out and deletes the cookies
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            //Sign the user out by deleting the cookies
+            await HttpContext.SignOutAsync();
+            //redirect to login page
+            return Redirect(ServerRedirectsURLs.Login);
         }
         #endregion
 
@@ -194,23 +223,40 @@ namespace SaveMyDataServer.Controllers
                 SetViewBagErrorMessage(ex.Message);
                 return View(model);
             }
+            //Set the temp data before redirect email auth
+            TempData[TempDataDictionaryKeys.Email] = model.Email;
             //Redirect the user to confirm his/her email
             return Redirect(ServerRedirectsURLs.EmailAuth);
         }
         /// <summary>
-        /// Logs the user out and deletes the cookies
+        /// sends a confirmation email to the user
         /// </summary>
         /// <returns></returns>
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> Logout()
+        [HttpPost]
+        public async Task<IActionResult> EmailConfirmation([FromForm]string email)
         {
-            //Sign the user out by deleting the cookies
-            await HttpContext.SignOutAsync();
-            //redirect to login page
-            return Redirect(ServerRedirectsURLs.Login);
-        }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ErrorMessages.MissingData);
+            }
 
+            try
+            {
+                //Try to send the user an email
+                var user = await AuthUserService.SendConfirmationEmail(email);
+
+                if (user == null)
+                {
+                    return BadRequest(ErrorMessages.InvalidData);
+                }
+
+                return Ok(user.IsMailConfirmed ? SuccessMessages.EmailConfirmed : SuccessMessages.EmailSent);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
         #endregion
     }
 }
