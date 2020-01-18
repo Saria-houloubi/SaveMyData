@@ -7,6 +7,12 @@ function initializeTable() {
 
     //Get the selected table from the select tag
     selectedTable = document.getElementById("dbTable").value;
+
+    //set all the table holder name
+    var holders = document.getElementsByClassName('selected-table-name-holder');
+    for (var i = 0; i < holders.length; i++)
+        holders[i].setAttribute('value', selectedTable);
+
     //Set the selected title
     document.getElementById("selected-table-title").innerText = selectedTable;
     //Get the count of rows in that table
@@ -151,10 +157,14 @@ function tableRowToGrid(grid, tableRow, startIndex, prependFieldText) {
 //
 //Ask the user to make sure before deleting
 //
-function askConfirmation() {
+function askConfirmation(id = null) {
+    if (id !== null) {
+        document.getElementById('delete-record-id').setAttribute('value', id);
+    }
     //show the confirmation model
     $('#delete-confirmation-modal').modal('show');
 }
+
 ///
 //Deletes a record from the database
 // element: the delete button to disable untile the server response is given
@@ -192,6 +202,7 @@ function deleteRecord(element) {
         });
     }
 }
+
 //
 //Edits a record in the database
 //

@@ -19,7 +19,6 @@ namespace SaveMyDataServer.Models
         public string Database { get; set; }
         #endregion
 
-
         #region Constructer
         /// <summary>
         /// Default constructer

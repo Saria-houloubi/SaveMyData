@@ -118,6 +118,8 @@ namespace SaveMyDataServer.Helpers
                     //Get the property value
                     htmlTable = string.Concat(htmlTable, "<td>", prop.GetValue(item, null), "</td>");
                 }
+
+               
                 htmlTable = string.Concat(htmlTable, $"</tr>");
             }
             //Close the table

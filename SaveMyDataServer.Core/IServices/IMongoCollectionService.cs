@@ -31,6 +31,14 @@ namespace SaveMyDataServer.Core.IServices
         /// <returns></returns>
         Task<T> EditHoleRecordById<T>(T record, string id, string table, string database);
         /// <summary>
+        /// Renames a collection 
+        /// </summary>
+        /// <param name="oldName"></param>
+        /// <param name="newName"></param>
+        /// <param name="database"></param>
+        /// <returns></returns>
+        Task RenameCollection(string oldName, string newName, string database);
+        /// <summary>
         /// Gets the list of all the records that are in the collection
         /// </summary>
         /// <typeparam name="T">The type of the records to get</typeparam>
@@ -39,7 +47,6 @@ namespace SaveMyDataServer.Core.IServices
         /// <param name="pagination">The pagination information to skip and take</param>
         /// <returns></returns>
         Task<List<T>> GetCollection<T>(string table, string database, PaginationModel pagination = null);
-
         /// <summary>
         /// Gets the count of records in a table
         /// </summary>
@@ -48,8 +55,7 @@ namespace SaveMyDataServer.Core.IServices
         /// <param name="database"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        Task<long> GetCollectionCount<T>(string table, string database,Expression<Func<T,bool>> filter);
-
+        Task<long> GetCollectionCount<T>(string table, string database, Expression<Func<T, bool>> filter);
         /// <summary>
         /// Overloaded method for getCollection with filtering abilties
         /// </summary>
@@ -77,7 +83,26 @@ namespace SaveMyDataServer.Core.IServices
         /// <param name="database">The database the user is working on</param>
         /// <returns></returns>
         Task<T> DeleteRecordById<T>(string id, string table, string database);
-
-
+        /// <summary>
+        /// Deletes a record that matches the sent filetr
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filter"></param>
+        /// <param name="table"></param>
+        /// <param name="database"></param>
+        /// <returns></returns>
+        Task<T> DeleteRecord<T>(Expression<Func<T, bool>> filter, string table, string database);
+        /// <summary>
+        /// Drops a database only if empty 
+        /// </summary>
+        /// <param name="database"></param>
+        /// <returns></returns>
+        Task DropDatabase(string database);
+        /// <summary>
+        /// Drops a collection with the sent name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        Task DropCollection(string name, string database);
     }
 }

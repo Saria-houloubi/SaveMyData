@@ -116,15 +116,44 @@ namespace SaveMyDataServer.Database.Services
             }
             return collectionAndCount;
         }
-        public async Task<T> DeleteRecord<T>(string id, string table)
+        public async Task<T> DeleteRecord<T>(Expression<Func<T, bool>> filter, string table)
         {
             //Get the collection from the database
             var collection = MongoDatabase.GetCollection<T>(table);
+
             //Get the item from the database and delete it
-            var itemToDelete = await collection.FindOneAndDeleteAsync(Builders<T>.Filter.Eq(MongoTableBaseFieldNames.Id, ObjectId.Parse(id)));
+            var itemToDelete = await collection.FindOneAndDeleteAsync(filter);
 
             return itemToDelete;
         }
+
+        public async Task<T> DeleteRecord<T>(FilterDefinition<T> filter, string table)
+        {
+            //Get the collection from the database
+            var collection = MongoDatabase.GetCollection<T>(table);
+
+            //Get the item from the database and delete it
+            var itemToDelete = await collection.FindOneAndDeleteAsync(filter);
+
+            return itemToDelete;
+        }
+        public async Task DropDatabase(string dbName)
+        {
+            // wait until the database is droped
+            await MongoDatabase.Client.DropDatabaseAsync(dbName);
+        }
+
+        public async Task DropColleciton(string name)
+        {
+            // wait until the collection is droped
+            await MongoDatabase.DropCollectionAsync(name);
+        }
+        public async Task RenameColleciton(string oldName, string newName)
+        {
+            // wait until the collection is droped
+            await MongoDatabase.RenameCollectionAsync(oldName, newName);
+        }
+
         public void InitilizeDatabase(string databaseName, bool create = false)
         {
             //Create the clinet

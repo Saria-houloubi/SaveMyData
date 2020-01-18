@@ -7,5 +7,7 @@
     {
         public const string EmailConfirmed = "Your email has been confirmed!";
         public const string EmailSent = "Confirmation email has been sent!";
+
+        public const string OperationSuccess = "All done!";
     }
 }

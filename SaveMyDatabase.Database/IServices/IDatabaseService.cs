@@ -29,7 +29,14 @@ namespace SaveMyDataServer.Database.IServices
         /// <param name="id">The unique if od the record</param>
         /// <param name="table">The table the record is saved in</param>
         /// <returns></returns>
-        Task<T> ReplaceRecordById<T>(T record,string id, string table);
+        Task<T> ReplaceRecordById<T>(T record, string id, string table);
+        /// <summary>
+        /// Renames a collection
+        /// </summary>
+        /// <param name="oldName"></param>
+        /// <param name="newName"></param>
+        /// <returns></returns>
+        Task RenameColleciton(string oldName, string newName);
         /// <summary>
         /// Gets a record from the database depending on the sent filters values
         /// </summary>
@@ -70,15 +77,26 @@ namespace SaveMyDataServer.Database.IServices
         /// <param name="id">The id of the record in the database</param>
         /// <param name="table">The table to find the record in</param>
         /// <returns></returns>
-        Task<T> DeleteRecord<T>(string id, string table);
+        Task<T> DeleteRecord<T>(Expression<Func<T, bool>> filter, string table);
+        Task<T> DeleteRecord<T>(FilterDefinition<T> filter, string table);
 
-
+        /// <summary>
+        /// Drops a database (Make sure to drop all tables in the database before droping the database)
+        /// </summary>
+        /// <param name="dbName">The name of the database to drop</param>
+        Task DropDatabase(string dbName);
+        /// <summary>
+        /// Drops a collection with the sent name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        Task DropColleciton(string name);
         /// <summary>
         /// Initilizes which database to start connecting and using
         /// </summary>
         /// <param name="databaseName">The database name the user created</param>
         /// <param name="create">If ture will create the database</param>
-        void InitilizeDatabase(string databaseName,bool create =false);
+        void InitilizeDatabase(string databaseName, bool create = false);
 
     }
 }

@@ -5,6 +5,8 @@ using MongoDB.Bson;
 using Newtonsoft.Json;
 using SaveMyDataServer.Controllers.Base;
 using SaveMyDataServer.Core.IServices;
+using SaveMyDataServer.Database.Models.Users;
+using SaveMyDataServer.Database.Static;
 using SaveMyDataServer.Helpers;
 using SaveMyDataServer.Models;
 using SaveMyDataServer.Models.API;
@@ -156,6 +158,33 @@ namespace SaveMyDataServer.Controllers
             }
 
         }
+        /// <summary>
+        /// Update a collection
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<IActionResult> Collection([FromForm]UpdateCollectionModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                //Return a bad request
+                return BadRequest(ErrorMessages.MissingData);
+            }
+
+            try
+            {
+                //Try to update the name
+                await MongoCollectionService.RenameCollection(model.Name, model.NewName,UniqueDatabaseName(model.Database));
+
+                return Ok(SuccessMessages.OperationSuccess);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+
+        }
 
         #endregion
 
@@ -183,6 +212,58 @@ namespace SaveMyDataServer.Controllers
 
             }
 
+        }
+        /// <summary>
+        /// Deletes a database from the server
+        /// </summary>
+        /// <param name="db">The database name to delete</param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<IActionResult> Database([FromForm]Guid id)
+        {
+            if (Guid.Empty == id)
+            {
+                return BadRequest(ErrorMessages.InvalidData);
+            }
+
+            try
+            {
+                //Delete the record from the users table
+                var record = await MongoCollectionService.DeleteRecord<UserDatabaseModel>(item => item.Id == id, DatabaseTableNames.UserDatabases, DatabaseNames.Main);
+                //Drop the database
+                await MongoCollectionService.DropDatabase(UniqueDatabaseName(record.Name));
+
+                return Ok(SuccessMessages.OperationSuccess);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Deletes a collection from the server
+        /// </summary>
+        /// <param name="db">The database name to delete</param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<IActionResult> Collection([FromForm]DeteleRecordModel model)
+        {
+            if (!ModelState.IsValid || string.IsNullOrWhiteSpace(model.Database) || string.IsNullOrWhiteSpace(model.Table))
+            {
+                return BadRequest(ErrorMessages.InvalidData);
+            }
+
+            try
+            {
+                //Delete the record from the users table
+                await MongoCollectionService.DropCollection(model.Table, UniqueDatabaseName(model.Database));
+                return Ok(SuccessMessages.OperationSuccess);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
         #endregion
     }

@@ -18,15 +18,22 @@
     </p>
     <form class="text-center">
         <label for="dbTable" class="font-weight-bold">Select Table</label>
-        <select class="form-control" id="dbTable" onchange="initializeTable()">
-            @{
-                foreach (var item in Model.TablesAndCount)
-                {
-                    <option value="@item.Key">@item.Key </option>
-                }
-            }
-        </select>
+        <div class=" grid">
+            <div class="row">
+                <select class="form-control col-10" id="dbTable" onchange="initializeTable()">
+                    @{
+                        foreach (var item in Model.TablesAndCount)
+                        {
+                            <option value="@item.Key">@item.Key </option>
+                        }
+                    }
+                </select>
+                <button class="btn btn-outline-info col-1 ml-2" type="button" onclick="shoEditTableModal()">Edit</button>
+
+            </div>
+        </div>
     </form>
+
     <div class="container justify-content-left m-2">
         <span><b>Export to: </b></span>
         <i class="far fa-file-excel excel-icon" aria-label="excel" onclick="exportData(this,'@SaveMyDataServer.SharedKernal.Enums.SupportedExportFileTypes.Excel')">
@@ -74,6 +81,58 @@
 
 @Html.Partial("_ConfirmationModals")
 
+<div class="modal fade" id="edit-table-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit table</h5>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Name</span>
+                    </div>
+                    <input type="text" class="form-control selected-table-name-holder" disabled />
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">New name</span>
+                    </div>
+                    <input type="text" class="form-control" id="table-new-name" />
+                </div>
+
+            </div>
+            <div class="modal-footer" id="edit-modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button class="btn btn-info" onclick='editTable(this)'>Edit</button>
+                <button class="btn btn-danger" onclick="showDeleteTableConfirmation()" id="delete-modal-btn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal bg-dark fade" id="delete-table-confirmation-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Please confirme the delete operation</h5>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Name</span>
+                    </div>
+                    <input type="text" class="form-control selected-table-name-holder" disabled />
+                </div>
+            </div>
+            <div class="modal-footer" id="edit-modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button class="btn btn-danger" onclick="deleteTable(this)" id="delete-modal-btn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="~/js/Custom/spinners.js" type="text/javascript"></script>
 <script src="~/js/Custom/dataCenterHome.js" type="text/javascript"></script>
 <script src="~/js/Custom/pagination.js" type="text/javascript"></script>
@@ -95,6 +154,73 @@
     function exportData(element, type) {
         location.href = '@SaveMyDataServer.Static.ServerAjaxURLs.ExportData '+'?table=' + document.getElementById('selected-table-title').innerText +'&database=' + workingDatabase +'&type='+ type;
         return false;
+    }
+    //
+    //Deletes a table from thre database
+    // element: the button to disable
+    //
+    function deleteTable(element) {
+        //Create the spinner
+        var loadingSpinner = disableAndShowSpinner(element, 'text-danger');
+
+        if (loadingSpinner !== null) {
+            //Send the delete request
+            $.ajax(
+                '/datacenter/collection', {
+                    data: {
+                        Id : null,
+                        Table: selectedTable,
+                        Database: workingDatabase
+                    },
+                    method: 'DELETE',
+                    success: function (data, status, jqXHR) {
+                        location.reload()
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        setTopPageAlertMessage(jqXHR.responseText, 'alert-danger');
+                    }
+                }
+            ).always(function () {
+                enableAndHideSpinner(element, loadingSpinner);
+                //Hide the model from the user
+                $('#delete-table-confirmation-modal').modal('hide');
+            });
+        }
+    }
+
+    function editTable(element) {
+        //Create the spinner
+        var loadingSpinner = disableAndShowSpinner(element, 'text-info');
+
+        if (loadingSpinner !== null) {
+            //Send the delete request
+            $.ajax(
+                '/datacenter/collection', {
+                    data: {
+                        Name : selectedTable,
+                        NewName: $('#table-new-name').val(),
+                        Database : workingDatabase
+                    },
+                    method: 'PUT',
+                    success: function (data, status, jqXHR) {
+                        location.reload()
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        setTopPageAlertMessage(jqXHR.responseText, 'alert-danger');
+                    }
+                }
+            ).always(function () {
+                enableAndHideSpinner(element, loadingSpinner);
+                //Hide the model from the user
+                $('#edit-table-modal').modal('hide');
+            });
+        }
+    }
+    function shoEditTableModal() {
+        $("#edit-table-modal").modal().show();
+    }
+    function showDeleteTableConfirmation() {
+        $('#delete-table-confirmation-modal').modal().show();
     }
 </script>
 

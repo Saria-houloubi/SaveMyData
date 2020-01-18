@@ -1,5 +1,4 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
-using Newtonsoft.Json;
 using System;
 
 namespace SaveMyDataServer.Database.Models.Users
