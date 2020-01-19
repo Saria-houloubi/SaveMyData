@@ -2,6 +2,7 @@
 using OfficeOpenXml;
 using SaveMyDataServer.Core.IServices;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace SaveMyDataServer.Core.Services
@@ -11,6 +12,16 @@ namespace SaveMyDataServer.Core.Services
     /// </summary>
     public class ExcelService : IExcelService
     {
+
+        #region Properties
+        /// <summary>
+        /// The normal font size to use
+        /// </summary>
+        public float FontSizeNormal { get; set; } = 11;
+        public float FontSizeLarg => FontSizeNormal * 1.2f;
+
+        public string HeaderFontFamily { get; set; } = "Helvetica LT Std Cond Blk";
+        #endregion
         #region Constructer
         /// <summary>
         /// Default constructer
@@ -20,12 +31,6 @@ namespace SaveMyDataServer.Core.Services
 
         }
         #endregion
-        /// <summary>
-        /// Create an excel file from the sent data
-        /// </summary>
-        /// <param name="workSheetName">The name of the sheet </param>
-        /// <param name="data">The lis to of data</param>
-        /// <returns></returns>
         public byte[] CreateExcelFile(string workSheetName, List<BsonDocument> data)
         {
             //Create a new package
@@ -48,7 +53,6 @@ namespace SaveMyDataServer.Core.Services
                         workSheet.Cells.AutoFitColumns(0);
                     }
                 }
-
                 return package.GetAsByteArray();
             }
 
@@ -56,26 +60,54 @@ namespace SaveMyDataServer.Core.Services
 
         public void AddNewRow(ExcelWorksheet sheet, KeyValuePair<string, string> keyValue, int currentRow)
         {
+
+            //Loop throw the cells in the sheet
             for (int i = 1; i <= sheet.Cells.Columns; i++)
             {
+                //Get teh header cell that we are on 
                 var cell = sheet.Cells[1, i];
+                //If that is not the end cell
                 if (cell.Value != null)
                 {
                     if (cell.Value.ToString() == keyValue.Key)
                     {
+                        //Assgin the value in the wanted row
                         sheet.Cells[currentRow, i].Value = keyValue.Value;
                         break;
                     }
                 }
                 else
                 {
+                    //if header is not added then add it
                     cell.Value = keyValue.Key;
+                    //Set the header styling
+                    StyleCells(cell, FontSizeLarg, HeaderFontFamily, Color.LightGray);
+                    //Just add the value
                     sheet.Cells[currentRow, i].Value = keyValue.Value;
                     break;
                 }
+
             }
+
         }
 
+        public void StyleCells(ExcelRange cells, float fontSize, string fontFamily, Color fillColor)
+        {
+            //Loop throw each cell
+            foreach (var item in cells)
+            {
+                item.Style.Font.SetFromFont(new Font(fontFamily, fontSize));
+                item.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.MediumGray;
+                item.Style.Fill.BackgroundColor.SetColor(fillColor);
+            }
+        }
+        #region Helpers
+        /// <summary>
+        /// Gets the name of the property and its value from a bsond document
+        /// </summary>
+        /// <param name="document">The document to extract data from</param>
+        /// <param name="prepend">if there is any prepend to it for umflattining</param>
+        /// <returns></returns>
         public Dictionary<string, string> GetKeyNameValue(BsonDocument document, string prepend)
         {
             Dictionary<string, string> namesAndValues = new Dictionary<string, string>();
@@ -95,5 +127,7 @@ namespace SaveMyDataServer.Core.Services
 
             return namesAndValues;
         }
+        #endregion
+
     }
 }

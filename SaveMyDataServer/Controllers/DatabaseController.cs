@@ -64,7 +64,7 @@ namespace SaveMyDataServer.Controllers
                     creationData = item.CreationDateUTC.ToString("dd / MM / yyyy"),
                     link = $"<a class='btn btn-outline-info' href='/datacenter/home?db={item.Name}'>Show</a>",
                     deleteLink = $"<button class='btn btn-outline-danger' onClick='askConfirmation(this,\"{item.Id}\")'>Delete</button>"
-                }).ToList(), new string[] { "Name", "Creation data", "" }));
+                }).ToList(), new string[] { "Name", "Creation data", "", "" }));
             }
             catch (Exception ex)
             {
