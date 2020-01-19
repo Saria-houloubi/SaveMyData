@@ -140,7 +140,6 @@
     //cross values
     //The count of records to get in each request
     var recordsCountInTable = @SaveMyDataServer.Static.ServerPaginationCount.LargePage;
-    var dataEndPoint = '@SaveMyDataServer.Static.ServerAjaxURLs.GetCollectionTabble';
     var workingDatabase = '@Model.Database';
 
     //Once the documnet is loaded
@@ -155,72 +154,6 @@
         location.href = '@SaveMyDataServer.Static.ServerAjaxURLs.ExportData '+'?table=' + document.getElementById('selected-table-title').innerText +'&database=' + workingDatabase +'&type='+ type;
         return false;
     }
-    //
-    //Deletes a table from thre database
-    // element: the button to disable
-    //
-    function deleteTable(element) {
-        //Create the spinner
-        var loadingSpinner = disableAndShowSpinner(element, 'text-danger');
-
-        if (loadingSpinner !== null) {
-            //Send the delete request
-            $.ajax(
-                '/datacenter/collection', {
-                    data: {
-                        Id : null,
-                        Table: selectedTable,
-                        Database: workingDatabase
-                    },
-                    method: 'DELETE',
-                    success: function (data, status, jqXHR) {
-                        location.reload()
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        setTopPageAlertMessage(jqXHR.responseText, 'alert-danger');
-                    }
-                }
-            ).always(function () {
-                enableAndHideSpinner(element, loadingSpinner);
-                //Hide the model from the user
-                $('#delete-table-confirmation-modal').modal('hide');
-            });
-        }
-    }
-
-    function editTable(element) {
-        //Create the spinner
-        var loadingSpinner = disableAndShowSpinner(element, 'text-info');
-
-        if (loadingSpinner !== null) {
-            //Send the delete request
-            $.ajax(
-                '/datacenter/collection', {
-                    data: {
-                        Name : selectedTable,
-                        NewName: $('#table-new-name').val(),
-                        Database : workingDatabase
-                    },
-                    method: 'PUT',
-                    success: function (data, status, jqXHR) {
-                        location.reload()
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        setTopPageAlertMessage(jqXHR.responseText, 'alert-danger');
-                    }
-                }
-            ).always(function () {
-                enableAndHideSpinner(element, loadingSpinner);
-                //Hide the model from the user
-                $('#edit-table-modal').modal('hide');
-            });
-        }
-    }
-    function shoEditTableModal() {
-        $("#edit-table-modal").modal().show();
-    }
-    function showDeleteTableConfirmation() {
-        $('#delete-table-confirmation-modal').modal().show();
-    }
+   
 </script>
 

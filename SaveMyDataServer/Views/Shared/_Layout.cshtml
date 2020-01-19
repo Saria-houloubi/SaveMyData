@@ -80,12 +80,20 @@
             }
         </div>
         <main>
+
             @RenderBody()
         </main>
     </div>
+
     <footer class="text-center">
         <hr class="m-0" />
         <span>Copyright &copy; @DateTime.Now.Year</span>
     </footer>
 </body>
+
 </html>
+<script>
+    var collectionEndPoint = '@SaveMyDataServer.Static.ServerAjaxURLs.CollectionEndPoint';
+    var recrodEndPoint = '@SaveMyDataServer.Static.ServerAjaxURLs.RecordEndPoint';
+    var databaseEndPoint = '@SaveMyDataServer.Static.ServerAjaxURLs.DatabaseEndpoint';
+</script>

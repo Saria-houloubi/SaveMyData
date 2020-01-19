@@ -5,10 +5,11 @@
     /// </summary>
     public static class ServerAjaxURLs
     {
-        //Home Conroller
-        public const string GetDatabaseTable = "/Home/GetDatabaseData";
+        //Restful enpoint
+        public const string DatabaseEndpoint = "/database";
+        public const string CollectionEndPoint = "/collection";
+        public const string RecordEndPoint = "/record";
         //DataCenter controller
-        public const string GetCollectionTabble = "/DataCenter/GetTableData";
         public const string ExportData =          "/Datacenter/exportData";
         //Auth controller
         public const string EmailConfirmation = "/Auth/EmailConfirmation";

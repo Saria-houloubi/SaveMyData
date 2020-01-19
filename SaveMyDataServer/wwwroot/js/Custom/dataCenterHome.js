@@ -22,6 +22,7 @@ function initializeTable() {
     //Load the table data
     getTableData(1);
 }
+
 //
 //Gets the data that is saved in the selected table 100 element at a time
 //
@@ -31,7 +32,7 @@ function getTableData(pageNumber) {
     //Set a loading spinner until the data is fetched
     tableDiv.innerHTML = getLoadingGrowingSpinner();
     $.getJSON(
-        dataEndPoint,
+        `${collectionEndPoint}/get`,
         data = {
             "table": selectedTable, "database": workingDatabase, "pagination": getPaginationObject(pageNumber, recordsCountInTable)
         },
@@ -176,7 +177,7 @@ function deleteRecord(element) {
     if (loadingSpinner !== null) {
         //Send the delete request
         $.ajax(
-            '/datacenter/record', {
+            `${recordEndPoint}/delete`, {
                 data: {
                     Id: document.getElementById('record-id').value,
                     Table: document.getElementById('record-table-name').value,
@@ -223,7 +224,7 @@ function editRecord(element) {
         }
         //Send the delete request
         $.ajax(
-            '/datacenter/record', {
+            recrodEndPoint, {
                 data: {
                     Id: document.getElementById('record-id').value,
                     Table: document.getElementById('record-table-name').value,
@@ -248,4 +249,72 @@ function editRecord(element) {
     }
 }
 
+//
+//Deletes a table from thre database
+// element: the button to disable
+//
+function deleteTable(element) {
+    //Create the spinner
+    var loadingSpinner = disableAndShowSpinner(element, 'text-danger');
 
+    if (loadingSpinner !== null) {
+        //Send the delete request
+        $.ajax(
+            `${collectionEndPoint}/delete`, {
+                data: {
+                    Id: null,
+                    Table: selectedTable,
+                    Database: workingDatabase
+                },
+                method: 'DELETE',
+                success: function (data, status, jqXHR) {
+                    location.reload()
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    setTopPageAlertMessage(jqXHR.responseText, 'alert-danger');
+                }
+            }
+        ).always(function () {
+            enableAndHideSpinner(element, loadingSpinner);
+            //Hide the model from the user
+            $('#delete-table-confirmation-modal').modal('hide');
+        });
+    }
+}
+//
+//Edits a collection name 
+//
+function editTable(element) {
+    //Create the spinner
+    var loadingSpinner = disableAndShowSpinner(element, 'text-info');
+
+    if (loadingSpinner !== null) {
+        //Send the delete request
+        $.ajax(
+            `${collectionEndPoint}/put`, {
+                data: {
+                    Name: selectedTable,
+                    NewName: $('#table-new-name').val(),
+                    Database: workingDatabase
+                },
+                method: 'PUT',
+                success: function (data, status, jqXHR) {
+                    location.reload()
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    setTopPageAlertMessage(jqXHR.responseText, 'alert-danger');
+                }
+            }
+        ).always(function () {
+            enableAndHideSpinner(element, loadingSpinner);
+            //Hide the model from the user
+            $('#edit-table-modal').modal('hide');
+        });
+    }
+}
+function shoEditTableModal() {
+    $("#edit-table-modal").modal().show();
+}
+function showDeleteTableConfirmation() {
+    $('#delete-table-confirmation-modal').modal().show();
+}

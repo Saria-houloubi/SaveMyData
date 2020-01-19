@@ -20,7 +20,7 @@ function getTableData(pageNumber) {
     //Set a loading spinner until the data is fetched
     tableDiv.innerHTML = getLoadingGrowingSpinner();
     $.getJSON(
-        dataEndPoint,
+        `${databaseEndPoint}/get`,
         data = {
             "pagination": getPaginationObject(pageNumber, recordsCountInTable)
         },
@@ -66,7 +66,7 @@ function deleteRecord(element) {
     if (loadingSpinner !== null) {
         //Send the delete request
         $.ajax(
-            '/datacenter/database', {
+            `${databaseEndPoint}/delete`, {
                 data: {
                     id: document.getElementById('delete-record-id').value
                 },

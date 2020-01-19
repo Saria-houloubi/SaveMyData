@@ -68,40 +68,6 @@ namespace SaveMyDataServer.Controllers
 
             return View();
         }
-
-        /// <summary>
-        /// Get the database the user has created 
-        /// </summary>
-        /// <param name="pagination">The pagination options for the table</param>
-        /// <returns></returns>
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> GetDatabaseData(string pagination)
-        {
-            try
-            {
-                //Get the pagination object model
-                var paginationModel = JsonConvert.DeserializeObject<PaginationModel>(pagination);
-
-                //Get the databases the user created
-                var databases = await MongoCollectionService.GetCollectionFilterd<UserDatabaseModel>(DatabaseTableNames.UserDatabases,
-                                                        DatabaseNames.Main,
-                                                        Builders<UserDatabaseModel>.Filter.Eq(item => item.UserId, new Guid(User.GetClaim(ClaimTypes.PrimarySid).Value))
-                                                        , paginationModel);
-
-                return Json(HTMLCreatorHelper.CreateTable(databases.Select(item => new
-                {
-                    name = item.Name,
-                    creationData = item.CreationDateUTC.ToString("dd / MM / yyyy"),
-                    link = $"<a class='btn btn-outline-info' href='/datacenter/home?db={item.Name}'>Show</a>",
-                    deleteLink = $"<button class='btn btn-outline-danger' onClick='askConfirmation(this,\"{item.Id}\")'>Delete</button>"
-                }).ToList(), new string[] { "Name", "Creation data", "" }));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
         #endregion
     }
 }

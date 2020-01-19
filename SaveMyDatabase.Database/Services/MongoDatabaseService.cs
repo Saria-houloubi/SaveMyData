@@ -18,6 +18,7 @@ namespace SaveMyDataServer.Database.Services
     /// </summary>
     public class MongoDatabaseService : IDatabaseService
     {
+
         #region Properties
         /// <summary>
         /// The mongodatbase to do operrations on
