@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using SaveMyDataServer.SharedKernal;
+using SaveMyDataServer.SharedKernal.Enums;
 using System.Collections.Generic;
 
 namespace SaveMyDataServer.Helpers
@@ -43,7 +44,7 @@ namespace SaveMyDataServer.Helpers
         /// <param name="isCollapse"></param>
         /// <param name="enableEdit"></param>
         /// <returns></returns>
-        public static string CreateExpandableTableRow(BsonDocument element, string rowId, bool isCollapse = false, bool enableEdit = true)
+        public static string CreateExpandableTableRow(BsonDocument element, string rowId, bool isCollapse = false, bool enableEdit = true, bool exportCSV = true)
         {
             //Check if the row has any classes
             var rowClass = isCollapse ? "class = \"collapse table-secondary\"" : "";
@@ -78,6 +79,11 @@ namespace SaveMyDataServer.Helpers
                     //Add the table data cell for the property
                     row = string.Concat(row, $"<td><b>{fieldName}</b>: <span>{item.Value}</span></td>");
                 }
+            }
+            //Add the export csv button
+            if (exportCSV && !isCollapse)
+            {
+                row = string.Concat(row, $"<td><a class=\"btn\" onclick=\"exportRecord('{element[0]}','{SupportedExportFileTypes.CSV}')\" ><i class=\"fas fa-file-csv text-info\"></i></a></td>");
             }
             //Close top most row
             row = string.Concat(row, "</tr>");
@@ -119,7 +125,7 @@ namespace SaveMyDataServer.Helpers
                     htmlTable = string.Concat(htmlTable, "<td>", prop.GetValue(item, null), "</td>");
                 }
 
-               
+
                 htmlTable = string.Concat(htmlTable, $"</tr>");
             }
             //Close the table

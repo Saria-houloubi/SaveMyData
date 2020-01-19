@@ -9,6 +9,10 @@
         /// To export data into .xls
         /// </summary>
         Excel = 1,
+        /// <summary>
+        /// To export record into CSV
+        /// </summary>
+        CSV = 2,
 
     }
 }

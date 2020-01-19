@@ -11,6 +11,7 @@
         public const string RecordEndPoint = "/record";
         //DataCenter controller
         public const string ExportData = "/Datacenter/exportData";
+        public const string ExportRecord = "/Datacenter/ExportRecord";
         //Auth controller
         public const string EmailConfirmation = "/Auth/EmailConfirmation";
     }

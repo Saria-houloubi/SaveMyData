@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using OfficeOpenXml;
+using SaveMyDataServer.Core.Extensions;
 using SaveMyDataServer.Core.IServices;
 using System.Collections.Generic;
 using System.Drawing;
@@ -45,7 +46,7 @@ namespace SaveMyDataServer.Core.Services
                     for (int i = 0; i < data.Count; i++)
                     {
                         //Get the column names of this item
-                        var columnNames = GetKeyNameValue(data[i], "");
+                        var columnNames =  data[i].GetKeyNameValue("");
                         foreach (var item in columnNames)
                         {
                             AddNewRow(workSheet, item, i + 2);
@@ -101,33 +102,7 @@ namespace SaveMyDataServer.Core.Services
                 item.Style.Fill.BackgroundColor.SetColor(fillColor);
             }
         }
-        #region Helpers
-        /// <summary>
-        /// Gets the name of the property and its value from a bsond document
-        /// </summary>
-        /// <param name="document">The document to extract data from</param>
-        /// <param name="prepend">if there is any prepend to it for umflattining</param>
-        /// <returns></returns>
-        public Dictionary<string, string> GetKeyNameValue(BsonDocument document, string prepend)
-        {
-            Dictionary<string, string> namesAndValues = new Dictionary<string, string>();
-
-
-            foreach (var item in document)
-            {
-                if (item.Value.IsBsonDocument)
-                {
-                    namesAndValues = namesAndValues.Concat(GetKeyNameValue(item.Value.AsBsonDocument, $"{item.Name}.")).ToDictionary(x => x.Key, x => x.Value);
-                }
-                else
-                {
-                    namesAndValues.Add($"{prepend}{item.Name}", item.Value.ToString());
-                }
-            }
-
-            return namesAndValues;
-        }
-        #endregion
+     
 
     }
 }

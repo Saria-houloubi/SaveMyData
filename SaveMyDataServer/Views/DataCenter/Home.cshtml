@@ -155,6 +155,17 @@
         location.href = '@SaveMyDataServer.Static.ServerAjaxURLs.ExportData'+'?table=' + document.getElementById('selected-table-title').innerText +'&database=' + workingDatabase +'&type='+ type;
         return false;
     }
+    //
+    //Exports a single record into a the wanted file type
+    // id : the id of the record to export
+    // type : the type of file we want to export to
+    //
+    function exportRecord(id, type) {
+        location.href = '@SaveMyDataServer.Static.ServerAjaxURLs.ExportRecord'+'?id=' + id + '&table=' + document.getElementById('selected-table-title').innerText +'&database=' + workingDatabase +'&type='+ type;
+        return false;
+
+    }
+
 
 </script>
 

@@ -2,20 +2,17 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using Newtonsoft.Json;
+using MongoDB.Driver;
 using SaveMyDataServer.Controllers.Base;
+using SaveMyDataServer.Core.Extensions;
 using SaveMyDataServer.Core.IServices;
-using SaveMyDataServer.Database.Models.Users;
-using SaveMyDataServer.Database.Static;
-using SaveMyDataServer.Helpers;
-using SaveMyDataServer.Models;
-using SaveMyDataServer.Models.API;
+using SaveMyDataServer.SharedKernal;
 using SaveMyDataServer.SharedKernal.Enums;
-using SaveMyDataServer.SharedKernal.Models;
 using SaveMyDataServer.SharedKernal.Static;
 using SaveMyDataServer.ViewModels.DataCenter;
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SaveMyDataServer.Controllers
@@ -35,7 +32,7 @@ namespace SaveMyDataServer.Controllers
         /// <summary>
         /// The excel service layer to create and update files
         /// </summary>
-        public IExcelService ExcelService { get; set; }
+        public IExcelService ExcelService { get; private set; }
         #endregion
 
         #region Constructer
@@ -73,7 +70,7 @@ namespace SaveMyDataServer.Controllers
 
             return View(viewModel);
         }
-      
+
         /// <summary>
         /// Export the data into the sent wanted type
         /// </summary>
@@ -93,9 +90,68 @@ namespace SaveMyDataServer.Controllers
                 {
                     case SupportedExportFileTypes.Excel:
                         return File(ExcelService.CreateExcelFile($"{table}-{database}", data), "application/vnd.ms-excel", $"{table}-{database}-{DateTime.UtcNow.ToString("dd_MM_yyyy")}.xls");
+                    case SupportedExportFileTypes.CSV:
+                        return BadRequest(ErrorMessages.NotSupported);
                     default:
                         return BadRequest(ErrorMessages.InvalidData);
                 }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Exports a record into the wanted type
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> ExportRecord(string id, string table, string database, SupportedExportFileTypes type)
+        {
+            try
+            {
+                if (ObjectId.TryParse(id, out ObjectId objectId))
+                {
+                    //Get the data from the database
+                    var data = await MongoCollectionService.GetCollectionFilterd(table, UniqueDatabaseName(database), Builders<BsonDocument>.Filter.Eq(MongoTableBaseFieldNames.Id, objectId));
+
+                    if (data.Count > 0)
+                    {
+                        //Check what format the user requestd
+                        switch (type)
+                        {
+                            case SupportedExportFileTypes.Excel:
+                                return BadRequest(ErrorMessages.NotSupported);
+                            case SupportedExportFileTypes.CSV:
+                                //Create the csv file string
+                                var csv = new StringBuilder();
+                                //Get the properties and values
+                                var columnNames = data[0].GetKeyNameValue("");
+                                //Start the header and the value row
+                                var headerLine = $"{columnNames.First().Key}";
+                                var valueLine = $"{columnNames.First().Value}";
+                                //Loop throw the properties
+                                for (int i = 1; i < columnNames.Count; i++)
+                                {
+                                    //Get the element in the i(th) postion
+                                    var element = columnNames.ElementAt(i);
+                                    //Build the rows
+                                    headerLine = $"{headerLine},{element.Key}";
+                                    valueLine = $"{valueLine},{element.Value}";
+                                }
+                                //Add the the main csv file
+                                csv.AppendLine(headerLine);
+                                csv.AppendLine(valueLine);
+                                //Send the file back to the user
+                                return File(ASCIIEncoding.ASCII.GetBytes(csv.ToString()), "text/csv", $"{id}-{table}-{database}-{DateTime.UtcNow.ToString("dd_MM_yyyy")}.csv");
+                            default:
+                                return BadRequest(ErrorMessages.InvalidData);
+                        }
+                    }
+                }
+                return BadRequest(ErrorMessages.InvalidData);
             }
             catch (Exception ex)
             {
