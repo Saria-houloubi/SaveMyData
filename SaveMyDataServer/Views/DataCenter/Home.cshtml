@@ -43,7 +43,7 @@
 </div>
 
 <div class="container-fluid text-center">
-    <h1 class="display-6 font-weight-bold">Table: <span class="text-info font-weight-light" id="selected-table-title"></span></h1>
+    <h1 class="display-6 font-weight-bold d-inline-block">Table: <span class="text-info font-weight-light" id="selected-table-title"></span></h1> <button onclick="showEditModal(this,true)" class="btn btn-outline-success mb-3 ml-2">+</button>
     <div id="selected-table-content" class="text-left  table-responsive border">
 
     </div>
@@ -66,14 +66,20 @@
                 </button>
             </div>
             <div class="modal-body">
+                <button class="btn btn-outline-info mb-4" onclick="addNewFieldValueEmptyRow()">add</button>
                 <div class="grid" id="edit-record-modal-body-grid">
 
                 </div>
             </div>
             <div class="modal-footer" id="edit-modal-footer">
                 <button class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button class="btn btn-danger" onclick="askConfirmation()">Delete</button>
-                <button class="btn btn-info" id="edit-modal-btn" onclick="editRecord(this)">Edit</button>
+                <div id="edit-mode-buttons">
+                    <button class="btn btn-danger" onclick="askConfirmation()">Delete</button>
+                    <button class="btn btn-info" id="edit-modal-btn" onclick="editRecord(this)">Edit</button>
+                </div>
+                <div id="add-mode-buttons">
+                    <button class="btn btn-success" onclick="addRecord(this)">Add</button>
+                </div>
             </div>
         </div>
     </div>

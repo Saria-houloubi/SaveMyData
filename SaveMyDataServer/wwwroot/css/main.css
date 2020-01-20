@@ -2,6 +2,7 @@
 @import url("Custom/pagination.css");
 @import url("Custom//grid.css");
 @import url("Custom//button.css");
+@import url("Custom//animations.css");
 
 html, body {
     height: 100%;

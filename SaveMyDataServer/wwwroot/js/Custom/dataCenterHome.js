@@ -60,22 +60,38 @@ function createFormFiledValueRow(field, value) {
     var fieldDiv = document.createElement('div');
     fieldDiv.classList.add('input-group-prepend');
     //Crate the span for the field text
-    var fieldSpan = document.createElement('span');
-    fieldSpan.classList.add('input-group-text');
-    fieldSpan.innerText = field;
+    var fieldInput = document.createElement('input');
+    fieldInput.classList.add('form-control');
+    fieldInput.setAttribute('type', 'text');
+    fieldInput.setAttribute('value', field);
+
     //Add the span to the inneer div
-    fieldDiv.appendChild(fieldSpan);
+    fieldDiv.appendChild(fieldInput);
     //Create the field input text element
     var valueInput = document.createElement('input');
     valueInput.classList.add('form-control');
     valueInput.setAttribute('type', 'text');
     valueInput.value = value;
 
+    //Create delete field button
+    var deleteButton = document.createElement('button');
+    deleteButton.classList.add('btn', 'btn-outline-danger', 'ml-2');
+    deleteButton.setAttribute('onclick', 'deleteRow(this)');
+    deleteButton.innerText = 'X';
+
     //Add to the row element
     row.appendChild(fieldDiv);
     row.appendChild(valueInput);
+    row.appendChild(deleteButton);
 
     return row;
+}
+//
+//Delets the row that is parent to the element
+// element : the DOM element that did the action
+//
+function deleteRow(element) {
+    element.parentElement.remove();
 }
 
 //
@@ -96,18 +112,30 @@ function bindEditButtonModel() {
 //Shows the edit modal and fills it with information
 // element: the DOM elemen that sent the request
 //
-function showEditModal(element) {
+function showEditModal(element, newElment = false) {
     //get the model object
-    var editModal = document.getElementById("edit-record-modal-body-grid");
+    var editModalGrid = document.getElementById("edit-record-modal-body-grid");
     //clear anything in the modal
-    editModal.innerHTML = "";
-    //Stop the default action of it
-    element.preventDefault();
-    //Move from the a -> td -> tr
-    var tableRow = element.currentTarget.parentElement.parentElement;
-    tableRowToGrid(editModal, tableRow, 1, "");
+    editModalGrid.innerHTML = "";
+    if (!newElment) {
+        //Stop the default action of it
+        element.preventDefault();
+        //Move from the a -> td -> tr
+        var tableRow = element.currentTarget.parentElement.parentElement;
+        tableRowToGrid(editModalGrid, tableRow, 1, "");
+        //Show the edit buttons and hide the add
+        document.getElementById('edit-mode-buttons').style.display = "block";
+        document.getElementById('add-mode-buttons').style.display = "none";
+
+    } else {
+        //Show the add buttons and hide the edit
+        document.getElementById('edit-mode-buttons').style.display = "none";
+        document.getElementById('add-mode-buttons').style.display = "block";
+    }
+    document.getElementById('record-table-name').setAttribute('value', document.getElementById('selected-table-title').innerText);
+    document.getElementById('record-database-name').setAttribute('value', document.getElementById('selected-database-name').innerText);
     //Show the model to the user
-    $("#edit-record-modal").modal('show');
+    $('#edit-record-modal').modal('show');
 }
 //
 //Moves a table row to agrid key value pair
@@ -128,8 +156,11 @@ function tableRowToGrid(grid, tableRow, startIndex, prependFieldText) {
         }
 
     }
+
+    //The last element as the main row has an export button at the end
+    var endIndex = prependFieldText === "" ? tableRow.cells.length - 1 : tableRow.cells.length;
     //Move throw the row cells
-    for (var j = startIndex; j < tableRow.cells.length; j++) {
+    for (var j = startIndex; j < endIndex; j++) {
         //Get the cell
         var cell = tableRow.cells[j];
         //Get the first child of the cell
@@ -145,16 +176,32 @@ function tableRowToGrid(grid, tableRow, startIndex, prependFieldText) {
 
         grid.appendChild(createFormFiledValueRow(field, value));
     }
-    //Set the id input to disabled
-    grid.firstElementChild.querySelector('input').setAttribute('disabled', true);
-    //Set the row as selected
-    tableRow.classList.add('selected-row');
-    //Set the hidden input for delete and update
-    document.getElementById('record-id').setAttribute('value', grid.firstElementChild.querySelector('input').value);
-    document.getElementById('delete-record-id').setAttribute('value', grid.firstElementChild.querySelector('input').value);
-    document.getElementById('record-table-name').setAttribute('value', document.getElementById('selected-table-title').innerText);
-    document.getElementById('record-database-name').setAttribute('value', document.getElementById('selected-database-name').innerText);
+
+    //Do it only once at the first row
+    if (prependFieldText === "") {
+        //Set the id input to disabled
+        var idInpute = grid.getElementsByTagName('input')[0];
+        idInpute.setAttribute('disabled', true);
+        //Set the row as selected
+        tableRow.classList.add('selected-row');
+        //Set the hidden input for delete and update
+        document.getElementById('record-id').setAttribute('value', idInpute.value);
+        document.getElementById('delete-record-id').setAttribute('value', idInpute.value);
+    }
 }
+
+//
+// Adds a new filed value row with empty values
+//
+function addNewFieldValueEmptyRow() {
+    //Create the row
+    var row = createFormFiledValueRow("", "");
+    //Get the edit molel
+    var editModal = document.getElementById("edit-record-modal-body-grid");
+    //Append the row to the end of the model
+    editModal.appendChild(row);
+}
+
 //
 //Ask the user to make sure before deleting
 //
@@ -220,11 +267,11 @@ function editRecord(element) {
         //Loop throw the grid items and add the key value pair
         for (var i = 0; i < grid.children.length; i++) {
             var elementGrid = grid.children[i];
-            unflattenJSON(jsonData, elementGrid.getElementsByClassName('input-group-text')[0].innerText.split('.').reverse(), elementGrid.getElementsByClassName('form-control')[0].value);
+            unflattenJSON(jsonData, elementGrid.getElementsByClassName('form-control')[0].value.split('.').reverse(), elementGrid.getElementsByClassName('form-control')[1].value);
         }
         //Send the delete request
         $.ajax(
-            recrodEndPoint, {
+            `${recrodEndPoint}/put`, {
                 data: {
                     Id: document.getElementById('record-id').value,
                     Table: document.getElementById('record-table-name').value,
@@ -232,6 +279,52 @@ function editRecord(element) {
                     data: JSON.stringify(jsonData)
                 },
                 method: 'PUT',
+                success: function (data, status, jqXHR) {
+                    //Reupdate the table content
+                    getTableData(document.getElementsByClassName('pagination-selected')[0].innerText);
+                    //Hide the model from the user
+                    $('#edit-record-modal').modal('hide');
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    setTopPageAlertMessage(errorThrown, 'alert-danger');
+                }
+            }
+        ).always(function () {
+            enableAndHideSpinner(element, loadingSpinner);
+        });
+    }
+}
+
+
+//
+//adds a record to the database
+//
+function addRecord(element) {
+    //Create the spinner
+    var loadingSpinner = disableAndShowSpinner(element, 'text-success');
+    if (loadingSpinner !== null) {
+
+        //Ready up the data part
+        //Get the grid modal
+        var grid = document.getElementById('edit-record-modal-body-grid');
+        //The data object that will hold the values
+        var jsonData = {};
+        //Loop throw the grid items and add the key value pair
+        for (var i = 0; i < grid.children.length; i++) {
+            var elementGrid = grid.children[i];
+            unflattenJSON(jsonData, elementGrid.getElementsByClassName('form-control')[0].value.split('.').reverse(), elementGrid.getElementsByClassName('form-control')[1].value);
+        }
+        //Send the delete request
+        $.ajax(
+            `${recrodEndPoint}/post`, {
+                data: {
+                    Id: null,
+                    Table: document.getElementById('record-table-name').value,
+                    Database: document.getElementById('record-database-name').value,
+                    data: JSON.stringify(jsonData)
+                },
+                method: 'POST',
                 success: function (data, status, jqXHR) {
                     //Reupdate the table content
                     getTableData(document.getElementsByClassName('pagination-selected')[0].innerText);
@@ -318,3 +411,4 @@ function shoEditTableModal() {
 function showDeleteTableConfirmation() {
     $('#delete-table-confirmation-modal').modal().show();
 }
+

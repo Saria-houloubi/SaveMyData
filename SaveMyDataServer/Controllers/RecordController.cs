@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using Newtonsoft.Json.Linq;
 using SaveMyDataServer.Controllers.Base;
 using SaveMyDataServer.Core.IServices;
 using SaveMyDataServer.Models;
 using SaveMyDataServer.Models.API;
 using SaveMyDataServer.SharedKernal.Static;
 using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SaveMyDataServer.Controllers
@@ -33,11 +35,42 @@ namespace SaveMyDataServer.Controllers
         #endregion
 
         #region GET requests
-
+      
         #endregion
 
         #region POST requests
+        /// <summary>
+        /// Adds a record into the user selected database
+        /// </summary>
+        /// <typeparam name="T">The type of the record to add</typeparam>
+        /// <param name="model">The data for addind and holds a data json property for the values to save</param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> Post([FromForm] RecordDetailModel<string> model)
+        {
+            //If the user forgot to provide the database name or table that he/she is working on
+            if (string.IsNullOrEmpty(model.Database) || string.IsNullOrEmpty(model.Table))
+            {
+                //Return a bad request
+                return BadRequest(ErrorMessages.MissingData);
+            }
 
+            try
+            {
+                
+                //trim any spaces in the properties names nad values
+                var data = Regex.Replace(model.Data, RegexPatterns.SpaceJsonEnd, "");
+                data = Regex.Replace(data, RegexPatterns.SpaceJsonStart, "");
+                //Try to add the record
+                var record = await MongoCollectionService.AddRecord(BsonDocument.Parse(data), model.Table, $"{UniqueDatabaseName(model.Database)}");
+
+                return Ok(record);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
         #endregion
 
         #region PUT requests
