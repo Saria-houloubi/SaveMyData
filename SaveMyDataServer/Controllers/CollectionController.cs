@@ -62,6 +62,33 @@ namespace SaveMyDataServer.Controllers
         #endregion
 
         #region POST requests
+        /// <summary>
+        /// Adds a new empty collection
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> Post([FromForm]UpdateCollectionModel model)
+        {
+            if (!ModelState.IsValid || string.IsNullOrEmpty(model.NewName))
+            {
+                //Return a bad request
+                return BadRequest(ErrorMessages.MissingData);
+            }
+
+            try
+            {
+                //Try to add the new collection
+                await MongoCollectionService.AddRecord<BsonDocument>(new BsonDocument(), model.NewName, UniqueDatabaseName(model.Database));
+
+                return Ok(SuccessMessages.OperationSuccess);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+
+        }
 
         #endregion
 

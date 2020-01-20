@@ -330,7 +330,6 @@ function addRecord(element) {
                     getTableData(document.getElementsByClassName('pagination-selected')[0].innerText);
                     //Hide the model from the user
                     $('#edit-record-modal').modal('hide');
-
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     setTopPageAlertMessage(errorThrown, 'alert-danger');
@@ -361,7 +360,7 @@ function deleteTable(element) {
                 },
                 method: 'DELETE',
                 success: function (data, status, jqXHR) {
-                    location.reload()
+                    location.reload();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     setTopPageAlertMessage(jqXHR.responseText, 'alert-danger');
@@ -392,7 +391,7 @@ function editTable(element) {
                 },
                 method: 'PUT',
                 success: function (data, status, jqXHR) {
-                    location.reload()
+                    location.reload();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     setTopPageAlertMessage(jqXHR.responseText, 'alert-danger');
@@ -405,7 +404,56 @@ function editTable(element) {
         });
     }
 }
-function shoEditTableModal() {
+//
+//Adds a new empty table
+//
+function addTable(element) {
+    //Create the spinner
+    var loadingSpinner = disableAndShowSpinner(element, 'text-success');
+
+    if (loadingSpinner !== null) {
+        //Send the delete request
+        $.ajax(
+            `${collectionEndPoint}/Post`, {
+                data: {
+                    Name: null,
+                    NewName: $('#table-new-name').val(),
+                    Database: workingDatabase
+                },
+                method: 'POST',
+                success: function (data, status, jqXHR) {
+                    location.reload();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    setTopPageAlertMessage(jqXHR.responseText, 'alert-danger');
+                }
+            }
+        ).always(function () {
+            enableAndHideSpinner(element, loadingSpinner);
+            //Hide the model from the user
+            $('#edit-table-modal').modal('hide');
+        });
+    }
+}
+function shoEditTableModal(addNew = false) {
+    if (!addNew) {
+        //Show the edit buttons and hide the add
+        var elements = document.getElementsByClassName('edit-table-modal-buttons');
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].style.display = "block";
+        }
+
+        document.getElementById('add-table-modal-buttons').style.display = "none";
+
+    } else {
+
+        //Show the add buttons and hide the edit
+        var elements2 = document.getElementsByClassName('edit-table-modal-buttons');
+        for (var j = 0; j < elements2.length; j++) {
+            elements2[j].style.display = "none";
+        }
+        document.getElementById('add-table-modal-buttons').style.display = "block";
+    }
     $("#edit-table-modal").modal().show();
 }
 function showDeleteTableConfirmation() {

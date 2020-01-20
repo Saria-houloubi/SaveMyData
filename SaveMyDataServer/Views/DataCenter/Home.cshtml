@@ -28,7 +28,8 @@
                         }
                     }
                 </select>
-                <button class="btn btn-outline-info col-1 ml-2" type="button" onclick="shoEditTableModal()">Edit</button>
+                <button class="btn btn-outline-success mx-1 col" type="button" onclick="shoEditTableModal(true)">Add</button>
+                <button class="btn btn-outline-info col" type="button" onclick="shoEditTableModal()">Edit</button>
 
             </div>
         </div>
@@ -43,7 +44,8 @@
 </div>
 
 <div class="container-fluid text-center">
-    <h1 class="display-6 font-weight-bold d-inline-block">Table: <span class="text-info font-weight-light" id="selected-table-title"></span></h1> <button onclick="showEditModal(this,true)" class="btn btn-outline-success mb-3 ml-2">+</button>
+    <h1 class="display-6 font-weight-bold d-inline-block">Table: <span class="text-info font-weight-light" id="selected-table-title"></span></h1>
+    <button onclick="showEditModal(this,true)" class="btn btn-outline-success mb-3 ml-2">+</button>
     <div id="selected-table-content" class="text-left  table-responsive border">
 
     </div>
@@ -91,14 +93,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit table</h5>
+                <h5 class="modal-title">Table Panel</h5>
             </div>
             <div class="modal-body">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Name</span>
+                <div class="edit-table-modal-buttons">
+                    <div class="input-group mb-3 ">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Name</span>
+                        </div>
+                        <input type="text" class="form-control selected-table-name-holder" disabled />
                     </div>
-                    <input type="text" class="form-control selected-table-name-holder" disabled />
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
@@ -110,8 +114,14 @@
             </div>
             <div class="modal-footer" id="edit-modal-footer">
                 <button class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button class="btn btn-info" onclick='editTable(this)'>Edit</button>
-                <button class="btn btn-danger" onclick="showDeleteTableConfirmation()" id="delete-modal-btn">Delete</button>
+                <div class="edit-table-modal-buttons">
+                    <button class="btn btn-info" onclick='editTable(this)'>Edit</button>
+                    <button class="btn btn-danger" onclick="showDeleteTableConfirmation()" id="delete-modal-btn">Delete</button>
+                </div>
+                <div id="add-table-modal-buttons">
+                    <button class="btn btn-success" onclick='addTable(this)'>Add</button>
+                </div>
+
             </div>
         </div>
     </div>
