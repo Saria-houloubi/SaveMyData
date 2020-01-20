@@ -17,7 +17,7 @@ namespace SaveMyDataServer.Controllers.APIs
     /// The controller to control how to work with the collections
     /// </summary>
     [TokenAuthorize]
-    public class CollectionAPIController : BaseAPIController
+    public class CollectionApiController : BaseAPIController
     {
         #region Services
 
@@ -31,7 +31,7 @@ namespace SaveMyDataServer.Controllers.APIs
         /// <summary>
         /// Default constructer
         /// </summary>
-        public CollectionAPIController(IMongoCollectionService collectionService)
+        public CollectionApiController(IMongoCollectionService collectionService)
         {
             CollectionService = collectionService;
         }

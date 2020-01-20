@@ -1,7 +1,133 @@
 ﻿@{
     ViewData["title"] = "Guid";
+
 }
 
-<div class="container-fluid bg-light  p-5">
-    <span class="display-1 font-weight-bold text-warning">Something great is being built</span>
+<div class="text-center">
+    <span class="display-4 text-monospace">Authentication</span>
 </div>
+
+<div class="container-fluid grid mt-4 text-monospace">
+    <div class="row">
+        <div class="col bg-light jumbotron mx-1">
+            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> checks the user credential and issues a JWT token.</spam>
+            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> POST</spam>
+            <spam class="text-dark "><span class="text-warning font-weight-bold">End point: </span> ../api/authapi/login</spam>
+        </div>
+        <div class="jumbotron col bg-dark mx-1">
+            <spam class="text-light d-block">Request</spam>
+            <spam class="text-light">POST <span class="text-warning">"../api/authapi/login"</span></spam>
+            <spam class="text-light d-block">Body</spam>
+            <p class="text-warning">
+                {
+                "email" : "mycoolMail@example.com",
+                "password" : "pizza"
+                }
+
+                <spam class="text-light d-block">Response</spam>
+            <p class="text-warning">
+                {
+                "token": "{JWTToken}",
+                "id": "326a5ae7-00d1-4b91-9d21-299db076cdab",
+                "email": "mycoolMail@example.com",
+                "fullName": "cheese",
+                "dob": "1996-11-03T20:00:00Z",
+                "isMailConfirmed": true
+                }
+            </p>
+
+        </div>
+    </div>
+</div>
+
+<div class="text-center">
+    <span class="display-4 text-monospace">Records</span>
+</div>
+
+<div class="container-fluid grid mt-4 text-monospace">
+    <div class="row">
+        <div class="col bg-light jumbotron mx-1">
+            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> get the list of records in a table.</spam>
+            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> GET</spam>
+            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">End point: </span> ../api/collectionapi/{datbaseName}/{tableName}</spam>
+            <spam class="text-dark "><span class="text-warning font-weight-bold">Authrized</span> JWT token <i class="fa fa-lock"></i></spam>
+
+        </div>
+        <div class="jumbotron col bg-dark mx-1">
+            <spam class="text-light d-block">Request</spam>
+            <spam class="text-light">GET <span class="text-warning">"../api/collecitonapi/Records/ShopDb/Products"</span></spam>
+            <spam class="text-light d-block">Response</spam>
+            <p class="text-warning">
+                {
+                "Name" : "Foo",
+                "Type" :"Bar",
+                "CreationData" : "2020-11-03T20:00:00Z",
+                "Custom" : {
+                "Key" : "Value"
+                "Number" : 1
+                }
+                }
+            </p>
+
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid grid mt-4 text-monospace">
+    <div class="row">
+        <div class="col bg-light jumbotron mx-1">
+            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> add a new record into a database table.</spam>
+            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> POST</spam>
+            <spam class="text-dark d-block"><span class="text-warning font-weight-bold ">End point: </span> ../api/collectionapi/Record</spam>
+            <spam class="text-dark "><span class="text-warning font-weight-bold">Authrized</span> JWT token <i class="fa fa-lock"></i></spam>
+        </div>
+        <div class="jumbotron col bg-dark mx-1">
+            <spam class="text-light d-block">Request</spam>
+            <spam class="text-light">POST <span class="text-warning">"../api/collecitonapi/ShopDb/Products"</span></spam>
+            <spam class="text-light d-block">Body</spam>
+            <p class="text-warning">
+                {
+                "Database" : "MyCoolDatabase",
+                "Table" : "CoolTable":
+                "Data" :
+                {
+                "Name" : "Foo",
+                "Type" :"Bar",
+                "Custom" : {
+                "Key" : "OurKeyValue"
+                "Number" : 1
+                }}}
+
+                <spam class="text-light d-block">Response</spam>
+            <p class="text-warning">
+                [
+                {
+                "name": "_id",
+                "value": "5e25bd52b022945a1cb2764f"
+                },
+                {
+                "name": "Name",
+                "value": "Foo"
+                },
+                {
+                "name": "Type",
+                "value": "Bar"
+                },
+                {
+                "name": "Custom",
+                "value": [
+                {
+                "name": "Key",
+                "value": "OurKeyValue"
+                },
+                {
+                "name": "Number",
+                "value": 1
+                }]}]
+            </p>
+
+        </div>
+    </div>
+</div>
+
+

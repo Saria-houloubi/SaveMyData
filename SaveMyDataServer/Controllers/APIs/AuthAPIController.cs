@@ -79,6 +79,7 @@ namespace SaveMyDataServer.Controllers.APIs
                 Email = user.Email,
                 FullName = user.FullName,
                 Id = user.Id,
+                IsMailConfirmed = user.IsMailConfirmed,
             };
             //Add the JWT token to the object
             response.Token = GenerateJwtToken(response);
