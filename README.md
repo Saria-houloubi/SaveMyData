@@ -15,8 +15,8 @@ But for any one who wants to try it you can go through the SaveMyData folder and
 
 ## Future
 I am still actively developing in the website and working on getting to the next mile stone :checkered_flag: which includes:
-1. CRUD operation on databases.
-1. Exporting data in CSV.
+1. CRUD operation on databases. :white_check_mark:
+1. Exporting data in CSV. :white_check_mark:
 1. API documantation.
 
 Made with :heart:
