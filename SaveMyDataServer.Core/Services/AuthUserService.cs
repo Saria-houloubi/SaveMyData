@@ -1,4 +1,6 @@
-﻿using SaveMyDataServer.Core.IServices;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
+using SaveMyDataServer.Core.IServices;
 using SaveMyDataServer.Database.IServices;
 using SaveMyDataServer.Database.Models.Users;
 using SaveMyDataServer.Database.Static;
@@ -104,23 +106,14 @@ namespace SaveMyDataServer.Core.Services
             return user;
         }
 
-        public async Task<UserModel> ConfirmUserEmail(Guid id, Guid mailId)
+        public async Task<bool> ConfirmUserEmail(Guid id, Guid mailId)
         {
             //Set to the main database until a user sends the database name
             DatabaseService.InitilizeDatabase(DatabaseNames.Main);
-            //Get the user from the database
-            var user = await DatabaseService.GetRecord<UserModel>(MongoTableBaseFieldNames.Id, id, DatabaseTableNames.Users);
+            //Update the user with the sent id
+            var result = await DatabaseService.UpdateRecords(Builders<BsonDocument>.Filter.Eq(MongoTableBaseFieldNames.Id, id), Builders<BsonDocument>.Update.Set(MongoTableBaseFieldNames.IsMailConfirmed, true), DatabaseTableNames.UserDatabases);
 
-            if (user == null || user.ConfirmMailId != mailId)
-            {
-                return null;
-            }
-
-            //change the email flag
-            user.IsMailConfirmed = true;
-            //Update the record in the database
-            user = await DatabaseService.ReplaceRecordById(user, id.ToString(), DatabaseTableNames.Users);
-            return user;
+            return result.ModifiedCount == 1;
         }
     }
 }

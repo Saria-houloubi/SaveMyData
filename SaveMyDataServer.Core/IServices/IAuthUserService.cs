@@ -32,7 +32,7 @@ namespace SaveMyDataServer.Core.IServices
         /// <param name="id">The id of the user that is confirming the email</param>
         /// <param name="sentMail">The id to check that is unique to each email sent</param>
         /// <returns></returns>
-        Task<UserModel> ConfirmUserEmail(Guid id,Guid sentMail);
+        Task<bool> ConfirmUserEmail(Guid id,Guid sentMail);
 
         /// <summary>
         /// Send an email to the user to confirm that it is not a spam emai;

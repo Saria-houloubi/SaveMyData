@@ -111,9 +111,9 @@ namespace SaveMyDataServer.Controllers
 
             try
             {
-                var user = await AuthUserService.ConfirmUserEmail(id, id2);
+                var result = await AuthUserService.ConfirmUserEmail(id, id2);
 
-                if (user == null)
+                if (result)
                 {
                     return RedirectWithMessage(ServerRedirectsURLs.EmailAuth, ErrorMessages.InvalidData, true);
                 }

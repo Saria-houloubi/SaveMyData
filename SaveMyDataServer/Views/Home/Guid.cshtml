@@ -185,7 +185,7 @@
 <div class="container-fluid grid mt-4 text-monospace">
     <div class="row">
         <div class="col bg-light jumbotron mx-1">
-            <span class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> Updates a record or a group of records based on the filter.</span>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> updates a record or a group of records based on the filter.</span>
             <span class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> PUT</span>
             <span class="text-dark d-block"><span class="text-warning font-weight-bold ">End point: </span> ../api/recordapi/update</span>
             <span class="text-dark "><span class="text-warning font-weight-bold">Authrized</span> JWT token <i class="fa fa-lock"></i></span>
@@ -219,4 +219,35 @@
     </div>
 </div>
 
+<div class="container-fluid grid mt-4 text-monospace">
+    <div class="row">
+        <div class="col bg-light jumbotron mx-1">
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> deletes a record or a group of records based on the filter.</span>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> DELETE</span>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold ">End point: </span> ../api/recordapi/delete</span>
+            <span class="text-dark "><span class="text-warning font-weight-bold">Authrized</span> JWT token <i class="fa fa-lock"></i></span>
+        </div>
+        <div class="jumbotron col bg-dark mx-1">
+            <span class="text-light d-block">Request</span>
+            <span class="text-light">DELETE <span class="text-warning">"../api/recordapi/delete"</span></span>
+            <span class="text-light d-block">Body</span>
+            <p class="text-warning">
+                {
+                "database" : "MyCoolDatabase",
+                "table" : "CoolTable",
+                "Filters" : "{Name : \"Foo\"
+                }
+            </p>
+            <p class="text-light"><span class="text-warning">Note: </span> You can get full list of mongo fileter queries <a class="text-success" href="https://docs.mongodb.com/manual/reference/operator/query/">here</a></p>
+            <span class="text-light d-block">Response</span>
+            <p class="text-light">Status code <span class="text-success">200 OK</span></p>
+            <p class="text-warning">
+                {
+                "deletedCount": 1,
+                "isAcknowledged": true
+                }
+            </p>
 
+        </div>
+    </div>
+</div>
