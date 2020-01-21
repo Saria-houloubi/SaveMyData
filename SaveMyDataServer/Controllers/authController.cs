@@ -200,10 +200,10 @@ namespace SaveMyDataServer.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromForm] RegisterViewModel model)
         {
-            if (!ModelState.IsValid || (model.Password != model.ConfirmPassword))
+            if (!ModelState.IsValid)
             {
                 //Set the error message
-                SetViewBagErrorMessage(ErrorMessages.InvalidData);
+                SetViewBagErrorMessage(ModelState.Values.ToString());
                 //Return the view to show
                 return View(model);
             }
@@ -235,7 +235,7 @@ namespace SaveMyDataServer.Controllers
         [HttpPost]
         public async Task<IActionResult> EmailConfirmation([FromForm]string email)
         {
-            if (!ModelState.IsValid)
+            if (string.IsNullOrEmpty(email))
             {
                 return BadRequest(ErrorMessages.MissingData);
             }

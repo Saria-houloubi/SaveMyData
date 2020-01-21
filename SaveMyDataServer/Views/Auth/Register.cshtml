@@ -10,24 +10,29 @@
 
         <div class="form-group">
             <input type="text" placeholder="Full name" asp-for="@Model.Name" class="form-control">
+            <span asp-validation-for="@Model.Name" class="text-danger"></span>
         </div>
         <div class="form-group">
             <input type="date" asp-for="@Model.DOB" class="form-control">
+            <span asp-validation-for="@Model.DOB" class="text-danger"></span>
         </div>
         <div class="form-group">
             <input type="email" placeholder="Email" asp-for="@Model.Email" class="form-control">
+            <span asp-validation-for="@Model.Email" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <input type="password" placeholder="Password" asp-for="@Model.Password" class="form-control">
+            <input type="password" placeholder="Password" asp-for="Password" class="form-control">
+            <span asp-validation-for="@Model.Password" class="text-danger"></span>
         </div>
         <div class="form-group">
             <input type="password" placeholder="Confirm password" asp-for="@Model.ConfirmPassword" class="form-control">
+            <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
         </div>
         <div class="form-group">
             <input type="submit" class="btn btn-dark btn-block" value="Create" />
         </div>
         <div class="form-group">
-            <a class="btn btn-info form-control"  href="@SaveMyDataServer.Static.ServerRedirectsURLs.EmailAuth">Confirmation email</a>
+            <a class="btn btn-info form-control" href="@SaveMyDataServer.Static.ServerRedirectsURLs.EmailAuth">Confirmation email</a>
         </div>
     </form>
 </div>

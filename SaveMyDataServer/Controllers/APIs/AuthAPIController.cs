@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using SaveMyDataServer.Controllers.APIs.Base;
 using SaveMyDataServer.Core.IServices;
+using SaveMyDataServer.ExteintionMethods;
 using SaveMyDataServer.Models.API;
 using SaveMyDataServer.SharedKernal.Static;
 using SaveMyDataServer.ViewModels.Auth;
@@ -100,7 +101,7 @@ namespace SaveMyDataServer.Controllers.APIs
             if (!ModelState.IsValid || (model.Password != model.ConfirmPassword))
             {
                 //Set the error message
-                return View(ErrorMessages.InvalidData);
+                return BadRequest(ModelState.GetValidationErrors());
             }
             try
             {
