@@ -8,7 +8,7 @@
         public const string Index = "/";
 
         public const string Home =    "/home";
-        public const string Guid =    "/home/guid";
+        public const string ApiGuid =    "/home/apiguid";
         public const string Contact = "/home/contact";
 
         public const string Login =     "/auth/login";

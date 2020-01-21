@@ -45,7 +45,7 @@ namespace SaveMyDataServer.Controllers
         }
 
         [HttpGet]
-        public IActionResult Guid()
+        public IActionResult ApiGuid()
         {
             return View();
         }
