@@ -47,6 +47,15 @@ namespace SaveMyDataServer.Database.Services
             return record;
         }
 
+        public async Task<UpdateResult> UpdateRecords(FilterDefinition<BsonDocument> filters, UpdateDefinition<BsonDocument> update, string table)
+        {
+            //Get the collection 
+            var colection = MongoDatabase.GetCollection<BsonDocument>(table);
+            //Try to update all the docments that match the filer
+            var updatedReocrds = await colection.UpdateManyAsync(filters, update);
+
+            return updatedReocrds;
+        }
         public async Task<T> ReplaceRecordById<T>(T record, string id, string table)
         {
             //If the record is a bson document
@@ -101,8 +110,6 @@ namespace SaveMyDataServer.Database.Services
             //Get the collection from the database
             return await MongoDatabase.GetCollection<T>(table).CountDocumentsAsync<T>(filter);
         }
-
-
         public async Task<Dictionary<string, long>> GetTables()
         {
             //Create the dictonary to hold the collections and there documnet count
@@ -127,7 +134,6 @@ namespace SaveMyDataServer.Database.Services
 
             return itemToDelete;
         }
-
         public async Task<T> DeleteRecord<T>(FilterDefinition<T> filter, string table)
         {
             //Get the collection from the database
@@ -143,7 +149,6 @@ namespace SaveMyDataServer.Database.Services
             // wait until the database is droped
             await MongoDatabase.Client.DropDatabaseAsync(dbName);
         }
-
         public async Task DropColleciton(string name)
         {
             // wait until the collection is droped

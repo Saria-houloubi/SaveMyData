@@ -10,14 +10,14 @@
 <div class="container-fluid grid mt-4 text-monospace">
     <div class="row">
         <div class="col bg-light jumbotron mx-1">
-            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> checks the user credential and issues a JWT token.</spam>
-            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> POST</spam>
-            <spam class="text-dark "><span class="text-warning font-weight-bold">End point: </span> ../api/authapi/login</spam>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> checks the user credential and issues a JWT token.</span>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> POST</span>
+            <span class="text-dark "><span class="text-warning font-weight-bold">End point: </span> ../api/authapi/login</span>
         </div>
         <div class="jumbotron col bg-dark mx-1">
-            <spam class="text-light d-block">Request</spam>
-            <spam class="text-light">POST <span class="text-warning">"../api/authapi/login"</span></spam>
-            <spam class="text-light d-block">Body</spam>
+            <span class="text-light d-block">Request</span>
+            <span class="text-light">POST <span class="text-warning">"../api/authapi/login"</span></span>
+            <span class="text-light d-block">Body</span>
             <p class="text-warning">
                 {
                 "email" : "mycoolMail@example.com",
@@ -25,7 +25,7 @@
                 }
             </p>
             </p>
-            <spam class="text-light d-block">Response</spam>
+            <span class="text-light d-block">Response</span>
             <p class="text-warning">
                 {
                 "token": "{JWTToken}",
@@ -44,14 +44,14 @@
 <div class="container-fluid grid mt-4 text-monospace">
     <div class="row">
         <div class="col bg-light jumbotron mx-1">
-            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> Registers new user.</spam>
-            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> POST</spam>
-            <spam class="text-dark "><span class="text-warning font-weight-bold">End point: </span> ../api/authapi/register</spam>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> Registers new user.</span>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> POST</span>
+            <span class="text-dark "><span class="text-warning font-weight-bold">End point: </span> ../api/authapi/register</span>
         </div>
         <div class="jumbotron col bg-dark mx-1">
-            <spam class="text-light d-block">Request</spam>
-            <spam class="text-light">POST <span class="text-warning">"../api/authapi/register"</span></spam>
-            <spam class="text-light d-block">Body</spam>
+            <span class="text-light d-block">Request</span>
+            <span class="text-light">POST <span class="text-warning">"../api/authapi/register"</span></span>
+            <span class="text-light d-block">Body</span>
             <p class="text-warning">
                 {
                 "name" : "Foo",
@@ -61,12 +61,9 @@
                 "dob" : "1996-11-04"
                 }
             </p>
-            </p>
-            <spam class="text-light d-block">Response</spam>
-            <p class="text-success">
-                200 OK
-            </p>
 
+            <span class="text-light d-block">Response</span>
+            <p class="text-light">Status code <span class="text-success">200 Ok</span></p>
         </div>
     </div>
 </div>
@@ -78,26 +75,50 @@
 <div class="container-fluid grid mt-4 text-monospace">
     <div class="row">
         <div class="col bg-light jumbotron mx-1">
-            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> get the list of records in a table.</spam>
-            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> GET</spam>
-            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">End point: </span> ../api/collectionapi/{datbaseName}/{tableName}</spam>
-            <spam class="text-dark "><span class="text-warning font-weight-bold">Authrized</span> JWT token <i class="fa fa-lock"></i></spam>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> get the list of records in a table.</span>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> GET</span>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">End point: </span> ../api/recordapi/records</span>
+            <span class="text-dark "><span class="text-warning font-weight-bold">Authrized</span> JWT token <i class="fa fa-lock"></i></span>
 
         </div>
         <div class="jumbotron col bg-dark mx-1">
-            <spam class="text-light d-block">Request</spam>
-            <spam class="text-light">GET <span class="text-warning">"../api/collecitonapi/Records/ShopDb/Products"</span></spam>
-            <spam class="text-light d-block">Response</spam>
+            <span class="text-light d-block">Request</span>
+            <span class="text-light d-block">GET <span class="text-warning">"../api/recordapi/records"</span></span>
+            <span class="text-light">Body </span>
             <p class="text-warning">
                 {
-                "Name" : "Foo",
-                "Type" :"Bar",
-                "CreationData" : "2020-11-03T20:00:00Z",
-                "Custom" : {
-                "Key" : "Value"
-                "Number" : 1
+                "database" : "MyCoolDatabase",
+                "table" : "CoolTable",
+                "Filters" : "{Name : \"Foo\" }"
                 }
-                }
+            </p>
+            <p class="text-light"><span class="text-warning">Note: </span> You can get full list of mongo fileter queries <a class="text-success" href="https://docs.mongodb.com/manual/reference/operator/query/">here</a></p>
+            <span class="text-light d-block">Response</span>
+            <p class="text-light">Status code <span class="text-success">200 Ok</span></p>
+            <p class="text-warning">
+                [[{
+                "name": "_id",
+                "value": "5e269aa0dd445a4decb8e7cb"
+                },
+                {
+                "name": "Name",
+                "value": "Foo"
+                },
+                {
+                "name": "Type",
+                "value": "Bar"
+                },
+                {
+                "name": "Custom",
+                "value": [
+                {
+                "name": "Key",
+                "value": "OurKeyValue"
+                },
+                {
+                "name": "Number",
+                "value": 1
+                }}]]
             </p>
 
         </div>
@@ -107,35 +128,90 @@
 <div class="container-fluid grid mt-4 text-monospace">
     <div class="row">
         <div class="col bg-light jumbotron mx-1">
-            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> add a new record into a database table.</spam>
-            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> POST</spam>
-            <spam class="text-dark d-block"><span class="text-warning font-weight-bold ">End point: </span> ../api/collectionapi/Record</spam>
-            <spam class="text-dark "><span class="text-warning font-weight-bold">Authrized</span> JWT token <i class="fa fa-lock"></i></spam>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> add a new record into a table.</span>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> POST</span>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold ">End point: </span> ../api/recordapi/create</span>
+            <span class="text-dark "><span class="text-warning font-weight-bold">Authrized</span> JWT token <i class="fa fa-lock"></i></span>
         </div>
         <div class="jumbotron col bg-dark mx-1">
-            <spam class="text-light d-block">Request</spam>
-            <spam class="text-light">POST <span class="text-warning">"../api/collecitonapi/ShopDb/Products"</span></spam>
-            <spam class="text-light d-block">Body</spam>
+            <span class="text-light d-block">Request</span>
+            <span class="text-light">POST <span class="text-warning">"../api/collecitonapi/ShopDb/Products"</span></span>
+            <span class="text-light d-block">Body</span>
             <p class="text-warning">
-                {
-                "Database" : "MyCoolDatabase",
-                "Table" : "CoolTable":
+                { "Database" : "MyCoolDatabase",
+                "Table" : "CoolTable",
                 "Data" :
-                {
-                "Name" : "Foo",
+                { "Name" : "Foo",
                 "Type" :"Bar",
                 "Custom" : {
-                "Key" : "OurKeyValue"
-                "Number" : 1
-                }}}
+                "Key" : "OurKeyValue",
+                "Number" : 1}}}
             </p>
 
-            <spam class="text-light d-block">Response</spam>
+            <span class="text-light d-block">Response</span>
+            <p class="text-light">Status code <span class="text-success">201 Created</span></p>
             <p class="text-warning">
-                [
-                {
+
+                [{
                 "name": "_id",
-                "value": "5e25bd52b022945a1cb2764f"
+                "value": "5e269aa0dd445a4decb8e7cb"
+                },
+                {
+                "name": "Name",
+                "value": "Foo"
+                },
+                {
+                "name": "Type",
+                "value": "Bar"
+                },
+                {
+                "name": "Custom",
+                "value": [
+                {
+                "name": "Key",
+                "value": "OurKeyValue"
+                },
+                {
+                "name": "Number",
+                "value": 1
+                }]}]
+            </p>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid grid mt-4 text-monospace">
+    <div class="row">
+        <div class="col bg-light jumbotron mx-1">
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> Updates a record or a group of records based on the filter.</span>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> PUT</span>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold ">End point: </span> ../api/recordapi/update</span>
+            <span class="text-dark "><span class="text-warning font-weight-bold">Authrized</span> JWT token <i class="fa fa-lock"></i></span>
+        </div>
+        <div class="jumbotron col bg-dark mx-1">
+            <span class="text-light d-block">Request</span>
+            <span class="text-light">POST <span class="text-warning">"../api/collecitonapi/ShopDb/Products"</span></span>
+            <span class="text-light d-block">Body</span>
+            <p class="text-warning">
+                { "Database" : "MyCoolDatabase",
+                "Table" : "CoolTable",
+                "Data" :
+                { "Name" : "Foo",
+                "Type" :"Bar",
+                "Custom" : {
+                "Key" : "OurKeyValue",
+                "Number" : 1}}}
+            </p>
+
+            <span class="text-light d-block">Response</span>
+            <p class="text-light">Status code <span class="text-success">201 Created</span></p>
+            <p class="text-warning">
+
+                [{
+                "name": "_id",
+                "value": "5e269aa0dd445a4decb8e7cb"
                 },
                 {
                 "name": "Name",

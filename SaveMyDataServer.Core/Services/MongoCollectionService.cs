@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using SaveMyDataServer.Core.IServices;
 using SaveMyDataServer.Database.IServices;
 using SaveMyDataServer.SharedKernal;
@@ -108,6 +109,14 @@ namespace SaveMyDataServer.Core.Services
             DatabaseService.InitilizeDatabase(database);
 
             return await DatabaseService.ReplaceRecordById<T>(record, id, table);
+        }
+
+        public async Task<UpdateResult> UpdateReocrds(FilterDefinition<BsonDocument> filters, UpdateDefinition<BsonDocument> update, string table, string database)
+        {
+            //Connect tot thw wanted database
+            DatabaseService.InitilizeDatabase(database);
+
+            return await DatabaseService.UpdateRecords(filters, update, table);
         }
 
         public async Task RenameCollection(string oldName, string newName, string database)

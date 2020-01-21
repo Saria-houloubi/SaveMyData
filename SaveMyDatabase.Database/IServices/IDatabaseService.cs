@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using SaveMyDataServer.SharedKernal.Models;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,14 @@ namespace SaveMyDataServer.Database.IServices
         /// <param name="database">The database we are working with</param>
         /// <returns></returns>
         Task<T> AddRecord<T>(T record, string table);
+        /// <summary>
+        /// Updates records that match the filter with the wanted update
+        /// </summary>
+        /// <param name="filters">The filter to match records with</param>
+        /// <param name="update">The update changes</param>
+        /// <param name="table">The table to work in</param>
+        /// <returns></returns>
+        Task<UpdateResult> UpdateRecords(FilterDefinition<BsonDocument> filters, UpdateDefinition<BsonDocument> update, string table);
         /// <summary>
         /// Updates a record in the database
         /// </summary>

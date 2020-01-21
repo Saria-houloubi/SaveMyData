@@ -60,7 +60,7 @@ namespace SaveMyDataServer.Controllers.APIs
                 //Try to get the records from the database
                 var records = await CollectionService.GetCollection<BsonDocument>(table, database);
 
-                return Ok(records);
+                return StatusCode(StatusCodes.Status201Created, records);
             }
             catch (Exception ex)
             {
