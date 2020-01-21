@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SaveMyDataServer.Attributes;
 using SaveMyDataServer.Controllers.APIs.Base;
 using SaveMyDataServer.Core.IServices;
 using SaveMyDataServer.Models;
 using SaveMyDataServer.Models.API;
+using SaveMyDataServer.SharedKernal.Models;
 using SaveMyDataServer.SharedKernal.Static;
 using System;
 using System.Text.RegularExpressions;
@@ -54,8 +56,13 @@ namespace SaveMyDataServer.Controllers
 
             try
             {
+
                 //Try to get the records from the database
-                var records = await MongoCollectionService.GetCollectionFilterd<BsonDocument>(model.Table, UniqueDatabaseName(model.Database), model.Filters);
+                var records = await MongoCollectionService.GetCollectionFilterd<BsonDocument>(
+                                                            model.Table,
+                                                            UniqueDatabaseName(model.Database),
+                                                            filterDefinition: model.Filters,
+                                                            pagination: string.IsNullOrEmpty(model.Pagination) ? null : JsonConvert.DeserializeObject<PaginationModel>(model.Pagination));
 
                 return Ok(records);
             }

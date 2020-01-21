@@ -69,6 +69,76 @@
 </div>
 
 <div class="text-center">
+    <span class="display-4 text-monospace">Databases</span>
+</div>
+
+<div class="container-fluid grid mt-4 text-monospace">
+    <div class="row">
+        <div class="col bg-light jumbotron mx-1">
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> get the list of databases the user created.</span>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> GET</span>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">End point: </span> ../api/databaseapi/databases</span>
+            <span class="text-dark "><span class="text-warning font-weight-bold">Authrized</span> JWT token <i class="fa fa-lock"></i></span>
+
+        </div>
+        <div class="jumbotron col bg-dark mx-1">
+            <span class="text-light d-block">Request</span>
+            <span class="text-light d-block">GET <span class="text-warning">"../api/databaseapi/databases"</span></span>
+            <span class="text-light">Headers </span>
+            <ul>
+                <li>
+                    <p class="text-warning">
+                        <span class="text-light">pagination</span> {"CurrentPage": 1 ,"FetchRecordCount" :0 }
+                    </p>
+                </li>
+            </ul>
+
+            <span class="text-light d-block">Response</span>
+            <p class="text-light">Status code <span class="text-success">200 Ok</span></p>
+            <p class="text-warning">
+                [
+                {
+                "id": "250b5e12-7b97-4ca1-9ffb-ff5f990a6643",
+                "userId": "2e87b431-1717-4f12-882e-75fadb884f9e",
+                "fullName": "2e87b431-1717-4f12-882e-75fadb884f9e_MyCoolDatabase",
+                "name": "MyCoolDatabase",
+                "creationDateUTC": "2020-01-21T06:30:56.418Z",
+                "key": "7b1bc441-7dfe-4af4-8b5f-14eb14229f47"
+                }
+                ]
+            </p>
+
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid grid mt-4 text-monospace">
+    <div class="row">
+        <div class="col bg-light jumbotron mx-1">
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> deletes and drops a database.</span>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> DELETE</span>
+            <span class="text-dark d-block"><span class="text-warning font-weight-bold ">End point: </span> ../api/databaseapi/delete</span>
+            <span class="text-dark "><span class="text-warning font-weight-bold">Authrized</span> JWT token <i class="fa fa-lock"></i></span>
+        </div>
+        <div class="jumbotron col bg-dark mx-1">
+            <span class="text-light d-block">Request</span>
+            <span class="text-light d-block"    >DELETE <span class="text-warning">"../api/databaseapi/delete"</span></span>
+            <span class="text-light">Headers </span>
+            <ul>
+                <li>
+                    <p class="text-warning">
+                        <span class="text-light">id</span> 250b5e12-7b97-4ca1-9ffb-ff5f990a6643
+                    </p>
+                </li>
+            </ul>
+            <span class="text-light d-block">Response</span>
+            <p class="text-light">Status code <span class="text-success">200 OK</span></p>
+        </div>
+    </div>
+</div>
+
+
+<div class="text-center">
     <span class="display-4 text-monospace">Records</span>
 </div>
 
@@ -89,7 +159,8 @@
                 {
                 "database" : "MyCoolDatabase",
                 "table" : "CoolTable",
-                "Filters" : "{Name : \"Foo\" }"
+                "Filters" : "{Name : \"foo\" }",
+                "pagination" : "{\"CurrentPage\" : 1 ,\"FetchRecordCount\" :100 }"
                 }
             </p>
             <p class="text-light"><span class="text-warning">Note: </span> You can get full list of mongo fileter queries <a class="text-success" href="https://docs.mongodb.com/manual/reference/operator/query/">here</a></p>
@@ -181,7 +252,6 @@
     </div>
 </div>
 
-
 <div class="container-fluid grid mt-4 text-monospace">
     <div class="row">
         <div class="col bg-light jumbotron mx-1">
@@ -251,3 +321,4 @@
         </div>
     </div>
 </div>
+

@@ -18,6 +18,10 @@ namespace SaveMyDataServer.Models
         /// If any filters where supplyed
         /// </summary>
         public string Filters { get; set; }
+        /// <summary>
+        /// The pagination object
+        /// </summary>
+        public string Pagination { get; set; }
         #endregion
 
         #region Constructer
