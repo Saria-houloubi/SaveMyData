@@ -73,7 +73,7 @@ namespace SaveMyDataServer.Core.Services
 
             return await DatabaseService.GetRecordsCount<T>(table, filter);
         }
-        public async Task<T> DeleteRecordById<T>(string id, string table, string database)
+        public async Task<DeleteResult> DeleteRecordById<T>(string id, string table, string database)
         {
             //Connect tot thw wanted database
             DatabaseService.InitilizeDatabase(database);
@@ -81,6 +81,13 @@ namespace SaveMyDataServer.Core.Services
             return await DatabaseService.DeleteRecord<T>(Builders<T>.Filter.Eq(MongoTableBaseFieldNames.Id, id), table);
         }
         public async Task<T> DeleteRecord<T>(Expression<Func<T, bool>> filter, string table, string database)
+        {
+            //Connect tot thw wanted database
+            DatabaseService.InitilizeDatabase(database);
+
+            return await DatabaseService.DeleteRecord<T>(filter, table);
+        }
+        public async Task<DeleteResult> DeleteRecord<T>(FilterDefinition<T> filter, string table, string database)
         {
             //Connect tot thw wanted database
             DatabaseService.InitilizeDatabase(database);

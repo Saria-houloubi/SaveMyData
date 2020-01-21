@@ -192,46 +192,27 @@
         </div>
         <div class="jumbotron col bg-dark mx-1">
             <span class="text-light d-block">Request</span>
-            <span class="text-light">POST <span class="text-warning">"../api/collecitonapi/ShopDb/Products"</span></span>
+            <span class="text-light">PUT <span class="text-warning">"../api/recordapi/update"</span></span>
             <span class="text-light d-block">Body</span>
             <p class="text-warning">
-                { "Database" : "MyCoolDatabase",
-                "Table" : "CoolTable",
-                "Data" :
-                { "Name" : "Foo",
-                "Type" :"Bar",
-                "Custom" : {
-                "Key" : "OurKeyValue",
-                "Number" : 1}}}
+                {
+                "database" : "MyCoolDatabase",
+                "table" : "CoolTable",
+                "Filters" : "{Name : \"Foo\" }",
+                "update" : "{$set : { Name :  \"bar\"} }"
+                }
             </p>
-
+            <p class="text-light"><span class="text-warning">Note: </span> You can get full list of mongo update operators <a class="text-success" href="https://docs.mongodb.com/manual/reference/operator/update/">here</a></p>
             <span class="text-light d-block">Response</span>
-            <p class="text-light">Status code <span class="text-success">201 Created</span></p>
+            <p class="text-light">Status code <span class="text-success">200 OK</span></p>
             <p class="text-warning">
-
-                [{
-                "name": "_id",
-                "value": "5e269aa0dd445a4decb8e7cb"
-                },
                 {
-                "name": "Name",
-                "value": "Foo"
-                },
-                {
-                "name": "Type",
-                "value": "Bar"
-                },
-                {
-                "name": "Custom",
-                "value": [
-                {
-                "name": "Key",
-                "value": "OurKeyValue"
-                },
-                {
-                "name": "Number",
-                "value": 1
-                }]}]
+                "isAcknowledged": true,
+                "isModifiedCountAvailable": true,
+                "matchedCount": 1,
+                "modifiedCount": 1,
+                "upsertedId": null
+                }
             </p>
 
         </div>

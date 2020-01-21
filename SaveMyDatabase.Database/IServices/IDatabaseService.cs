@@ -87,7 +87,7 @@ namespace SaveMyDataServer.Database.IServices
         /// <param name="table">The table to find the record in</param>
         /// <returns></returns>
         Task<T> DeleteRecord<T>(Expression<Func<T, bool>> filter, string table);
-        Task<T> DeleteRecord<T>(FilterDefinition<T> filter, string table);
+        Task<DeleteResult> DeleteRecord<T>(FilterDefinition<T> filter, string table);
 
         /// <summary>
         /// Drops a database (Make sure to drop all tables in the database before droping the database)

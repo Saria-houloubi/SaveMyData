@@ -134,13 +134,13 @@ namespace SaveMyDataServer.Database.Services
 
             return itemToDelete;
         }
-        public async Task<T> DeleteRecord<T>(FilterDefinition<T> filter, string table)
+        public async Task<DeleteResult> DeleteRecord<T>(FilterDefinition<T> filter, string table)
         {
             //Get the collection from the database
             var collection = MongoDatabase.GetCollection<T>(table);
 
             //Get the item from the database and delete it
-            var itemToDelete = await collection.FindOneAndDeleteAsync(filter);
+            var itemToDelete = await collection.DeleteManyAsync(filter);
 
             return itemToDelete;
         }

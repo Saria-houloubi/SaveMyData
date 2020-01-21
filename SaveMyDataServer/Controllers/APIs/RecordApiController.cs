@@ -137,7 +137,7 @@ namespace SaveMyDataServer.Controllers
         /// <param name="model">The model that hold the record detalise to delete it</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromForm] DeteleRecordModel model)
+        public async Task<IActionResult> Delete([FromBody] GetRecordModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -146,7 +146,8 @@ namespace SaveMyDataServer.Controllers
 
             try
             {
-                return Ok(await MongoCollectionService.DeleteRecordById<BsonDocument>(model.Id, model.Table, UniqueDatabaseName(model.Database)));
+                var result = await MongoCollectionService.DeleteRecord<BsonDocument>(model.Filters, model.Table, UniqueDatabaseName(model.Database));
+                return Ok(result);
             }
             catch (System.Exception ex)
             {

@@ -92,7 +92,7 @@ namespace SaveMyDataServer.Core.IServices
         /// <param name="table">The name of the table that holds the record</param>
         /// <param name="database">The database the user is working on</param>
         /// <returns></returns>
-        Task<T> DeleteRecordById<T>(string id, string table, string database);
+        Task<DeleteResult> DeleteRecordById<T>(string id, string table, string database);
         /// <summary>
         /// Deletes a record that matches the sent filetr
         /// </summary>
@@ -102,6 +102,7 @@ namespace SaveMyDataServer.Core.IServices
         /// <param name="database"></param>
         /// <returns></returns>
         Task<T> DeleteRecord<T>(Expression<Func<T, bool>> filter, string table, string database);
+        Task<DeleteResult> DeleteRecord<T>(FilterDefinition<T> filter, string table, string database);
         /// <summary>
         /// Drops a database only if empty 
         /// </summary>
