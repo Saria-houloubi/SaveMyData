@@ -25,7 +25,7 @@
                 }
             </p>
             </p>
-             <spam class="text-light d-block">Response</spam>
+            <spam class="text-light d-block">Response</spam>
             <p class="text-warning">
                 {
                 "token": "{JWTToken}",
@@ -35,6 +35,36 @@
                 "dob": "1996-11-03T20:00:00Z",
                 "isMailConfirmed": true
                 }
+            </p>
+
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid grid mt-4 text-monospace">
+    <div class="row">
+        <div class="col bg-light jumbotron mx-1">
+            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">About : </span> Registers new user.</spam>
+            <spam class="text-dark d-block"><span class="text-warning font-weight-bold">Method : </span> POST</spam>
+            <spam class="text-dark "><span class="text-warning font-weight-bold">End point: </span> ../api/authapi/register</spam>
+        </div>
+        <div class="jumbotron col bg-dark mx-1">
+            <spam class="text-light d-block">Request</spam>
+            <spam class="text-light">POST <span class="text-warning">"../api/authapi/register"</span></spam>
+            <spam class="text-light d-block">Body</spam>
+            <p class="text-warning">
+                {
+                "name" : "Foo",
+                "email" : "mycoolMail@example.com",
+                "password": "pizza",
+                "ConfirmPassword" : "pizza",
+                "dob" : "1996-11-04"
+                }
+            </p>
+            </p>
+            <spam class="text-light d-block">Response</spam>
+            <p class="text-success">
+                200 OK
             </p>
 
         </div>
@@ -99,7 +129,7 @@
                 "Number" : 1
                 }}}
             </p>
-    
+
             <spam class="text-light d-block">Response</spam>
             <p class="text-warning">
                 [

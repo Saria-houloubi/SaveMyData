@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using SaveMyDataServer.SharedKernal.Static;
+using MongoDB.Driver;
 using SaveMyDataServer.Controllers.APIs.Base;
 using SaveMyDataServer.Core.IServices;
 using SaveMyDataServer.Models.API;
+using SaveMyDataServer.SharedKernal.Static;
 using SaveMyDataServer.ViewModels.Auth;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -88,6 +89,36 @@ namespace SaveMyDataServer.Controllers.APIs
             return Ok(response);
         }
 
+        /// <summary>
+        /// Registers a new user
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
+        {
+            if (!ModelState.IsValid || (model.Password != model.ConfirmPassword))
+            {
+                //Set the error message
+                return View(ErrorMessages.InvalidData);
+            }
+            try
+            {
+                //Add the user into the database
+                var user = await AuthUserService.Register(model.Name, model.Email, model.Password, model.DOB);
+            }
+            catch (MongoWriteException)
+            {
+                //If the registerd email is already stored
+                return BadRequest(ErrorMessages.DuplicateEmail);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ErrorMessages.DuplicateEmail);
+            }
+            //Redirect the user to confirm his/her email
+            return Ok(SuccessMessages.OperationSuccess);
+        }
         #endregion
 
 
