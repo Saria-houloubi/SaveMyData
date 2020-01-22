@@ -15,7 +15,7 @@ namespace SaveMyDataServer.Controllers.APIs.Base
     ///     and sets the api route
     /// </summary>
     [Route("api/{controller}/{action}")]
-    public class BaseAPIController : Controller
+    public abstract class BaseAPIController : Controller
     {
 
         #region Constructer

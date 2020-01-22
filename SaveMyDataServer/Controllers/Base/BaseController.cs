@@ -9,7 +9,7 @@ namespace SaveMyDataServer.Controllers.Base
     /// <summary>
     /// The base controller class for the endpoints
     /// </summary>
-    public class BaseController : Controller
+    public abstract class BaseController : Controller
     {
         #region Constructer
         /// <summary>

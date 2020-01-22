@@ -5,7 +5,7 @@ namespace SaveMyDataServer.Models.Base
     /// <summary>
     /// The base model class
     /// </summary>
-    public class BaseModel
+    public abstract class BaseModel
     {
 
         #region Properties
