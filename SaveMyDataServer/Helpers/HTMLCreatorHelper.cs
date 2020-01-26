@@ -2,6 +2,7 @@
 using SaveMyDataServer.SharedKernal;
 using SaveMyDataServer.SharedKernal.Enums;
 using System.Collections.Generic;
+using System.Text;
 
 namespace SaveMyDataServer.Helpers
 {
@@ -19,7 +20,8 @@ namespace SaveMyDataServer.Helpers
         public static string GetMongoTableBson(List<BsonDocument> records, string tableName, bool enableEdit = true)
         {
             //Create the first tag for the table
-            string htmlTable = "<table class=\"table\">";
+            StringBuilder htmlTable = new StringBuilder();
+            htmlTable.AppendLine("<table class=\"table\">");
             //The row count for the table start from 1 to records.count
             var rowCount = 1;
             //The id for each row
@@ -30,10 +32,10 @@ namespace SaveMyDataServer.Helpers
                 //Set the id
                 rowId = $"{tableName}-r-{rowCount++}";
                 //Creeat the rows
-                htmlTable = string.Concat(htmlTable, CreateExpandableTableRow(item, rowId, enableEdit: enableEdit));
+                htmlTable.AppendLine(CreateExpandableTableRow(item, rowId, enableEdit: enableEdit));
             }
 
-            return htmlTable;
+            return htmlTable.ToString();
         }
 
         /// <summary>

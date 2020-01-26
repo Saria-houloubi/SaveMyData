@@ -54,7 +54,7 @@ namespace SaveMyDataServer.Core.Services
                 FullName = fullName,
                 Email = email,
                 DOB = DOB,
-                Password = PasswordHashHelpers.HashPassword(password),
+                Password = HashHelpers.HashPassword(password),
                 ConfirmMailId = Guid.NewGuid(),
                 IsMailConfirmed = false
             }, DatabaseTableNames.Users);
@@ -99,7 +99,7 @@ namespace SaveMyDataServer.Core.Services
             //Get the user from the database
             var user = await DatabaseService.GetRecord<UserModel>(MongoTableBaseFieldNames.Email, email, DatabaseTableNames.Users);
             //If the email is not vaild or the user provided the wrong password then just return false
-            if (user == null || !PasswordHashHelpers.VertifyPassword(user.Password, passowrd))
+            if (user == null || !HashHelpers.VertifyPassword(user.Password, passowrd))
             {
                 return null;
             }

@@ -1,18 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using SaveMyDataServer.Controllers.APIs.Base;
 using SaveMyDataServer.Core.IServices;
 using SaveMyDataServer.ExteintionMethods;
+using SaveMyDataServer.Helpers;
 using SaveMyDataServer.Models.API;
 using SaveMyDataServer.SharedKernal.Static;
 using SaveMyDataServer.ViewModels.Auth;
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SaveMyDataServer.Controllers.APIs
@@ -84,7 +81,7 @@ namespace SaveMyDataServer.Controllers.APIs
                 IsMailConfirmed = user.IsMailConfirmed,
             };
             //Add the JWT token to the object
-            response.Token = GenerateJwtToken(response);
+            response.Token = JWTTokenHelpers.GenerateJwtToken(response, DateTime.UtcNow.AddMonths(2));
 
             //Redirect the user to the home page
             return Ok(response);
@@ -123,49 +120,6 @@ namespace SaveMyDataServer.Controllers.APIs
         #endregion
 
 
-        #region Methods
-        /// <summary>
-        /// Generates a token for the user
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        public string GenerateJwtToken(UserAPIModel user)
-        {
-            //Get the jwt values from the configuration file
-            var audience = Configuration["Jwt:Audience"];
-            var issuer = Configuration["Jwt:Issuer"];
-            var SecretKey = Configuration["Jwt:SecretKey"];
 
-            //Set the claims for the token
-            var claims = new[]
-            {
-                //Set a unique key for the clam
-                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
-                
-                //Set the username for use in the httpcontext
-                new Claim(ClaimTypes.Email,user.Email),
-                new Claim(ClaimTypes.Name,user.FullName),
-                //The name ientifier that will be assigned before any database name owned by the user
-                new Claim(ClaimTypes.PrimarySid,user.Id.ToString()),
-
-            };
-            //Create the credentials that are used for the token
-            var credentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretKey)),
-                SecurityAlgorithms.HmacSha256
-                );
-
-            //Create the jwt token
-            var token = new JwtSecurityToken(
-                issuer: issuer,
-                audience: audience,
-                claims: claims,
-                expires: DateTime.Now.AddMonths(2),
-                signingCredentials: credentials
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-        #endregion
     }
 }

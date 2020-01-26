@@ -16,5 +16,7 @@ namespace SaveMyDataServer.SharedKernal.Static
         public static string EmailNotConfirmed = "Email is not confirmed please check your inbox";
         public static string EmailNotSent = "Can not send an email to the wanted address due to invalid data plase check and try again";
         public static string NotSupported = "This feature is not supported yet!";
+        public static string InvaildPermation = "You have no permision to do this operation";
+        public static string ServerError = "Something wrong happened plase try again, if error still showing please contact us!";
     }
 }

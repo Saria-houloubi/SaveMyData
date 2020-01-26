@@ -9,5 +9,6 @@
         public const string EmailSent = "Confirmation email has been sent!";
 
         public const string OperationSuccess = "All done!";
+        public const string PasswordChanged = "Your password has been changed!";
     }
 }

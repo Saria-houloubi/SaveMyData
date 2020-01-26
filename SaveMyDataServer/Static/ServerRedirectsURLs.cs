@@ -5,6 +5,8 @@
     /// </summary>
     public static class ServerRedirectsURLs
     {
+        public const string MainHost = "https://savemydata.sariahouloubi.com";
+        public const string DebHost = "https://localhost:5001";
         public const string Index = "/";
 
         public const string Home =    "/home";
@@ -15,6 +17,7 @@
         public const string Logout =    "/auth/logout";
         public const string Register =  "/auth/register";
         public const string EmailAuth = "/auth/emailauth";
+        public const string ChangePassword = "/auth/changepassword";
         
 
 

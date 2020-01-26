@@ -36,35 +36,6 @@ namespace SaveMyDataServer.Controllers.Base
 
             return base.View();
         }
-        /// <summary>
-        /// Sets a message to show to the user after some operations
-        ///     either shows an error message
-        ///     or a sucess message
-        ///     TODO:Future change to enum and display messages based on it for the message type    
-        /// </summary>
-        protected void SetMessages()
-        {
-            if (TempData.TryGetValue(TempDataDictionaryKeys.ErrorMessage, out object error))
-            {
-                ViewBag.ErrorMessage = error;
-            }
-            else if (TempData.TryGetValue(TempDataDictionaryKeys.SucessMessage, out object success))
-            {
-                ViewBag.SuccessMessage = success;
-            }
-        }
-        /// <summary>
-        /// Sets the user information if authorized
-        /// </summary>
-        private void SetUserDetailes()
-        {
-            if (HttpContext.User.Identity.IsAuthenticated)
-            {
-                ViewBag.Email = User.GetClaim(ClaimTypes.Email).Value;
-                ViewBag.Id = User.GetClaim(ClaimTypes.PrimarySid).Value;
-                ViewBag.Name = User.GetClaim(ClaimTypes.Name).Value;
-            }
-        }
         #endregion
 
         #region Methods
@@ -98,6 +69,36 @@ namespace SaveMyDataServer.Controllers.Base
         public string UniqueDatabaseName(string database)
         {
             return $"{HttpContext.User.GetClaim(ClaimTypes.PrimarySid).Value}{DatabaseSpecials.UniqueDatabaseNameSpliterCharecture}{database}";
+        }
+
+        /// <summary>
+        /// Sets a message to show to the user after some operations
+        ///     either shows an error message
+        ///     or a sucess message
+        ///     TODO:Future change to enum and display messages based on it for the message type    
+        /// </summary>
+        protected void SetMessages()
+        {
+            if (TempData.TryGetValue(TempDataDictionaryKeys.ErrorMessage, out object error))
+            {
+                ViewBag.ErrorMessage = error;
+            }
+            else if (TempData.TryGetValue(TempDataDictionaryKeys.SucessMessage, out object success))
+            {
+                ViewBag.SuccessMessage = success;
+            }
+        }
+        /// <summary>
+        /// Sets the user information if authorized
+        /// </summary>
+        private void SetUserDetailes()
+        {
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                ViewBag.Email = User.GetClaim(ClaimTypes.Email).Value;
+                ViewBag.Id = User.GetClaim(ClaimTypes.PrimarySid).Value;
+                ViewBag.Name = User.GetClaim(ClaimTypes.Name).Value;
+            }
         }
         #endregion
 

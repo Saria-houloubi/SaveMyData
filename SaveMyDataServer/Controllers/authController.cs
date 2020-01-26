@@ -3,15 +3,20 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using SaveMyDataServer.Controllers.Base;
 using SaveMyDataServer.Core.IServices;
+using SaveMyDataServer.Database.Static;
+using SaveMyDataServer.Sercret;
+using SaveMyDataServer.SharedKernal;
 using SaveMyDataServer.SharedKernal.Static;
 using SaveMyDataServer.Static;
 using SaveMyDataServer.ViewModels.Auth;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace SaveMyDataServer.Controllers
@@ -25,22 +30,26 @@ namespace SaveMyDataServer.Controllers
         /// <summary>
         /// The service to work with authintication a user
         /// </summary>
-        public IAuthUserService AuthUserService { get; set; }
+        public IAuthUserService AuthUserService { get; private set; }
         /// <summary>
         /// The mail service layer
         /// </summary>
-        public IMailService MailService { get; set; }
-
+        public IMailService MailService { get; private set; }
+        /// <summary>
+        /// The collection service to work with the database
+        /// </summary>
+        public IMongoCollectionService MongoCollectionService { get; private set; }
         #endregion
 
         #region Constructer
         /// <summary>
         /// Default constructer
         /// </summary>
-        public AuthController(IAuthUserService authUserService, IMailService mailService)
+        public AuthController(IAuthUserService authUserService, IMailService mailService, IMongoCollectionService mongoCollectionService)
         {
             AuthUserService = authUserService;
             MailService = mailService;
+            MongoCollectionService = mongoCollectionService;
         }
         #endregion
 
@@ -75,7 +84,7 @@ namespace SaveMyDataServer.Controllers
             return View(new RegisterViewModel());
         }
         /// <summary>
-        /// 
+        /// The email authintication page
         /// </summary>
         /// <returns></returns>
         public IActionResult EmailAuth()
@@ -92,6 +101,45 @@ namespace SaveMyDataServer.Controllers
             {
                 Email = registerEmail
             });
+        }
+        /// <summary>
+        /// The forgot password page
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+        /// <summary>
+        /// Show the change password view to the user if the  token is valid
+        /// </summary>
+        /// <param name="token">The token that holds the user email and the vaildation date for it</param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult ChangePassword(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                return View(new ChangePasswordViewModel());
+            }
+            else
+            {
+                //Read and decrypt the token
+                var tokenPlain = HashHelpers.DecryptBytesToString_AES(Convert.FromBase64String(token), SecretAESEncryptionInformation.Key, SecretAESEncryptionInformation.IV);
+                //split the value
+                var tokenValues = tokenPlain.Split(',');
+                //Check if the token date is still valid
+                if (DateTime.TryParse(tokenValues[1], out DateTime validationDate))
+                {
+                    //If the token date is still valid
+                    if (true)
+                    {
+                        //Return the update password view
+                        return View(new ChangePasswordViewModel() { ChangeAuthorized = true, Email = tokenValues[0], ChangeToken = token });
+                    }
+                }
+                return RedirectWithMessage(ServerRedirectsURLs.Index, ErrorMessages.InvalidData, true);
+            }
         }
         /// <summary>
         /// Confirms a user email
@@ -139,6 +187,7 @@ namespace SaveMyDataServer.Controllers
             //redirect to login page
             return Redirect(ServerRedirectsURLs.Login);
         }
+
         #endregion
 
         #region POST Requests
@@ -257,6 +306,94 @@ namespace SaveMyDataServer.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        /// <summary>
+        /// Requests for a change password link 
+        /// </summary>
+        /// <param name="email">The email of the user to request password change for</param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult RequestChangePassword([FromForm] string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectWithMessage(ServerRedirectsURLs.ChangePassword, ErrorMessages.InvalidData, true);
+            }
+            //TODO: Get the user from the database and send the email with the jwt token in it
+            SymmetricAlgorithm aes = new AesManaged();
+
+            byte[] key = aes.Key;
+
+            var plainLinkText = string.Join(',', email, DateTime.UtcNow.AddMinutes(30));
+
+            // Encrypt the string to an array of bytes.
+            byte[] encrypted = HashHelpers.EncryptStringToBytes_AES(plainLinkText, SecretAESEncryptionInformation.Key, SecretAESEncryptionInformation.IV);
+
+            //Get the string represntation
+            var encryptedToken = Convert.ToBase64String(encrypted).Replace("+", "%2B");
+
+            //Send the link to the user
+            MailService.SendEmail(new Core.Models.EmailModel
+            {
+                ContentHTML = $"<h1 class='text-info'> Password Change </h1> <p>Okey one more step to go, click <a href=\"{ServerRedirectsURLs.DebHost}{ServerRedirectsURLs.ChangePassword}?token={encryptedToken}\">here</a> to change your password</p><p>For security resons link" +
+                "will only work for the next 10 minutes</p>",
+                Subject = "Password Change",
+                UserEmail = email,
+                UserFullName = email
+            });
+            //Redirect the user to the index page
+            return RedirectWithMessage(ServerRedirectsURLs.Index, SuccessMessages.EmailSent, false);
+        }
+        /// <summary>
+        /// Changes the user password
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword([FromForm] ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectWithMessage(ServerRedirectsURLs.Index, ErrorMessages.InvalidData, true);
+            }
+            //Read and decrypt the token
+            var tokenPlain = HashHelpers.DecryptBytesToString_AES(Convert.FromBase64String(model.ChangeToken), SecretAESEncryptionInformation.Key, SecretAESEncryptionInformation.IV);
+            //split the value
+            var tokenValues = tokenPlain.Split(',');
+            //Check if the token date is still valid
+            if (DateTime.TryParse(tokenValues[1], out DateTime validationDate))
+            {
+                //If the token date is still valid
+                if (true)//DateTime.UtcNow <= validationDate)
+                {
+                    if (tokenValues[0] == model.Email)
+                    {
+                        try
+                        {
+                            var result = await MongoCollectionService.UpdateReocrds(Builders<BsonDocument>.Filter.Eq(MongoTableBaseFieldNames.Email, model.Email)
+                                                                                , Builders<BsonDocument>.Update.Set(MongoTableBaseFieldNames.Password, HashHelpers.HashPassword(model.Password))
+                                                                                , DatabaseTableNames.Users,
+                                                                                DatabaseNames.Main);
+                            if (result.ModifiedCount == 1)
+                            {
+                                return RedirectWithMessage(ServerRedirectsURLs.Login, SuccessMessages.PasswordChanged, false);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+
+                            return RedirectWithMessage(ServerRedirectsURLs.Login, ex.Message, true);
+                        }
+                    }
+                }
+            }
+
+            return RedirectWithMessage(ServerRedirectsURLs.Index, ErrorMessages.InvaildPermation, true);
+        }
+
+        #endregion
+
+        #region PUT Requests
+
         #endregion
     }
 }
