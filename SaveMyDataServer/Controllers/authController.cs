@@ -132,7 +132,7 @@ namespace SaveMyDataServer.Controllers
                 if (DateTime.TryParse(tokenValues[1], out DateTime validationDate))
                 {
                     //If the token date is still valid
-                    if (true)
+                    if (DateTime.UtcNow <= validationDate)
                     {
                         //Return the update password view
                         return View(new ChangePasswordViewModel() { ChangeAuthorized = true, Email = tokenValues[0], ChangeToken = token });
@@ -334,8 +334,8 @@ namespace SaveMyDataServer.Controllers
             //Send the link to the user
             MailService.SendEmail(new Core.Models.EmailModel
             {
-                ContentHTML = $"<h1 class='text-info'> Password Change </h1> <p>Okey one more step to go, click <a href=\"{ServerRedirectsURLs.DebHost}{ServerRedirectsURLs.ChangePassword}?token={encryptedToken}\">here</a> to change your password</p><p>For security resons link" +
-                "will only work for the next 10 minutes</p>",
+                ContentHTML = $"<h1 class='text-info'> Password Change </h1> <p>Okey one more step to go, click <a href=\"{ServerRedirectsURLs.MainHost}{ServerRedirectsURLs.ChangePassword}?token={encryptedToken}\">here</a> to change your password</p><p>For security resons link" +
+                "will only work for the next 30 minutes</p>",
                 Subject = "Password Change",
                 UserEmail = email,
                 UserFullName = email
@@ -363,7 +363,7 @@ namespace SaveMyDataServer.Controllers
             if (DateTime.TryParse(tokenValues[1], out DateTime validationDate))
             {
                 //If the token date is still valid
-                if (true)//DateTime.UtcNow <= validationDate)
+                if (DateTime.UtcNow <= validationDate)
                 {
                     if (tokenValues[0] == model.Email)
                     {
