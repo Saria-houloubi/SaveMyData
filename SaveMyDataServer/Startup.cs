@@ -11,6 +11,7 @@ using SaveMyDataServer.Core.IServices;
 using SaveMyDataServer.Core.Services;
 using SaveMyDataServer.Database.IServices;
 using SaveMyDataServer.Database.Services;
+using SaveMyDataServer.Sercret;
 using SaveMyDataServer.Static;
 using System.Text;
 
@@ -57,9 +58,9 @@ namespace SaveMyDataServer
                     {
                         ValidateAudience = true,
                         ValidateIssuer = true,
-                        ValidAudience = Configuration["Jwt:Audience"],
-                        ValidIssuer = Configuration["Jwt:Issuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SecretKey"]))
+                        ValidAudience = SecretJWTTokenInformation.Audience,
+                        ValidIssuer = SecretJWTTokenInformation.Issuer,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretJWTTokenInformation.SecretKey))
                     };
                 });
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
