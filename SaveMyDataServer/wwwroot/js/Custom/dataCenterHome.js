@@ -180,7 +180,7 @@ function tableRowToGrid(grid, tableRow, startIndex, prependFieldText) {
     //Do it only once at the first row
     if (prependFieldText === "") {
         //Set the id input to disabled
-        var idInpute = grid.getElementsByTagName('input')[0];
+        var idInpute = grid.getElementsByTagName('input')[1];
         idInpute.setAttribute('disabled', true);
         //Set the row as selected
         tableRow.classList.add('selected-row');
@@ -269,9 +269,9 @@ function editRecord(element) {
             var elementGrid = grid.children[i];
             unflattenJSON(jsonData, elementGrid.getElementsByClassName('form-control')[0].value.split('.').reverse(), elementGrid.getElementsByClassName('form-control')[1].value);
         }
-        //Send the delete request
+        //Send the update request
         $.ajax(
-            `${recrodEndPoint}/put`, {
+            `${recordEndPoint}/put`, {
                 data: {
                     Id: document.getElementById('record-id').value,
                     Table: document.getElementById('record-table-name').value,
@@ -317,7 +317,7 @@ function addRecord(element) {
         }
         //Send the delete request
         $.ajax(
-            `${recrodEndPoint}/post`, {
+            `${recordEndPoint}/post`, {
                 data: {
                     Id: null,
                     Table: document.getElementById('record-table-name').value,
