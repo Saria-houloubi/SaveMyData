@@ -235,6 +235,7 @@ function deleteRecord(element) {
                     //Remove the row from the grid
                     document.getElementsByClassName('selected-row')[0].remove();
                     //Hide the model from the user
+                    $('#delete-confirmation-modal').modal('hide');
                     $('#edit-record-modal').modal('hide');
 
                     //decrement the table row count
