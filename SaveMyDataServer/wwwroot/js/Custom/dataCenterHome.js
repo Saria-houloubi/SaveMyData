@@ -4,7 +4,6 @@ var selectedTable = "";
 //Initializes the the table once it is selectd
 //
 function initializeTable() {
-    //TODO: Fix pagination when filtering elements
     //Get the selected table from the select tag
     selectedTable = document.getElementById("dbTable").value;
 
@@ -50,7 +49,7 @@ function getTableData(pageNumber) {
             "table": selectedTable, "database": workingDatabase, "pagination": getPaginationObject(pageNumber, recordsCountInTable), "filters": filters
         },
         function (result) {
-            var table = CreateHTMLTable(result);
+            var table = CreateHTMLCustomExpandableNoColumnsTable(result);
             //Set the table data
             tableDiv.firstChild.replaceWith(table);
             //Bind the edit buttons into the modal
