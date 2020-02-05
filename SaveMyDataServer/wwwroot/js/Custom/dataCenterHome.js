@@ -4,7 +4,7 @@ var selectedTable = "";
 //Initializes the the table once it is selectd
 //
 function initializeTable() {
-
+    //TODO: Fix pagination when filtering elements
     //Get the selected table from the select tag
     selectedTable = document.getElementById("dbTable").value;
 
@@ -27,6 +27,19 @@ function initializeTable() {
 //Gets the data that is saved in the selected table 100 element at a time
 //
 function getTableData(pageNumber) {
+    //Open the json string
+    var filters = "{";
+    //Get the filters from the DOM
+    var filterElements = document.getElementsByClassName('filter');
+    //Loop throw the items
+    for (var i = 0; i < filterElements.length; i++) {
+        if (i > 0)
+            filters += ',';
+        //Concat the filters in one string
+        filters += filterElements[i].children[0].value;
+    }
+    //Close the json string object
+    filters += '}';
     //Get the part where the table should be inseterd in
     var tableDiv = document.getElementById("selected-table-content");
     //Set a loading spinner until the data is fetched
@@ -34,11 +47,12 @@ function getTableData(pageNumber) {
     $.getJSON(
         `${collectionEndPoint}/get`,
         data = {
-            "table": selectedTable, "database": workingDatabase, "pagination": getPaginationObject(pageNumber, recordsCountInTable)
+            "table": selectedTable, "database": workingDatabase, "pagination": getPaginationObject(pageNumber, recordsCountInTable), "filters": filters
         },
         function (result) {
+            var table = CreateHTMLTable(result);
             //Set the table data
-            tableDiv.innerHTML = result;
+            tableDiv.firstChild.replaceWith(table);
             //Bind the edit buttons into the modal
             bindEditButtonModel();
         }
@@ -58,18 +72,17 @@ function createFormFiledValueRow(field, value) {
     row.classList.add('input-group', 'mb-3');
     //Create the prepend inner field text div
     var fieldDiv = document.createElement('div');
-    fieldDiv.classList.add('input-group-prepend');
+    fieldDiv.classList.add('input-group-prepend','col-4');
     //Crate the span for the field text
     var fieldInput = document.createElement('input');
-    fieldInput.classList.add('form-control');
+    fieldInput.classList.add('form-control', 'mr-1', 'font-weight-bold');
     fieldInput.setAttribute('type', 'text');
     fieldInput.setAttribute('value', field);
-
     //Add the span to the inneer div
     fieldDiv.appendChild(fieldInput);
     //Create the field input text element
     var valueInput = document.createElement('input');
-    valueInput.classList.add('form-control');
+    valueInput.classList.add('form-control','col-7');
     valueInput.setAttribute('type', 'text');
     valueInput.value = value;
 
@@ -112,16 +125,16 @@ function bindEditButtonModel() {
 //Shows the edit modal and fills it with information
 // element: the DOM elemen that sent the request
 //
-function showEditModal(element, newElment = false) {
+function showEditModal(event, newElment = false) {
     //get the model object
     var editModalGrid = document.getElementById("edit-record-modal-body-grid");
     //clear anything in the modal
     editModalGrid.innerHTML = "";
     if (!newElment) {
         //Stop the default action of it
-        element.preventDefault();
+        event.preventDefault();
         //Move from the a -> td -> tr
-        var tableRow = element.currentTarget.parentElement.parentElement;
+        var tableRow = event.currentTarget.parentElement.parentElement;
         tableRowToGrid(editModalGrid, tableRow, 1, "");
         //Show the edit buttons and hide the add
         document.getElementById('edit-mode-buttons').style.display = "block";
@@ -168,7 +181,7 @@ function tableRowToGrid(grid, tableRow, startIndex, prependFieldText) {
         //If them first child is a link to another row
         if (cellFirstChild.getAttribute('href') !== null) {
             //add the row and prepend its fields with the link text
-            tableRowToGrid(grid, document.querySelector(cellFirstChild.getAttribute('href')), 0, cellFirstChild.innerText + '.');
+            tableRowToGrid(grid, document.querySelector(cellFirstChild.getAttribute('href')), 0, cellFirstChild.children[1].innerText + '.');
             continue;
         }
         var field = prependFieldText + cellFirstChild.innerText;
@@ -180,13 +193,15 @@ function tableRowToGrid(grid, tableRow, startIndex, prependFieldText) {
     //Do it only once at the first row
     if (prependFieldText === "") {
         //Set the id input to disabled
-        var idInpute = grid.getElementsByTagName('input')[1];
-        idInpute.setAttribute('disabled', true);
+        var idInputeField = grid.getElementsByTagName('input')[0];
+        var idInputeValue = grid.getElementsByTagName('input')[1];
+        idInputeField.setAttribute('disabled', true);
+        idInputeValue .setAttribute('disabled', true);
         //Set the row as selected
         tableRow.classList.add('selected-row');
         //Set the hidden input for delete and update
-        document.getElementById('record-id').setAttribute('value', idInpute.value);
-        document.getElementById('delete-record-id').setAttribute('value', idInpute.value);
+        document.getElementById('record-id').setAttribute('value', idInputeValue.value);
+        document.getElementById('delete-record-id').setAttribute('value', idInputeValue.value);
     }
 }
 

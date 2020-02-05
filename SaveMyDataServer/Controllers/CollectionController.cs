@@ -43,14 +43,14 @@ namespace SaveMyDataServer.Controllers
         /// <param name="count">the amount of records to get for pagination</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Get(string table, string database, string pagination)
+        public async Task<IActionResult> Get(string table, string database, string pagination, string filters)
         {
             try
             {
                 //Get the pagination object
                 var paginationObject = JsonConvert.DeserializeObject<PaginationModel>(pagination);
-
-                return Json(HTMLCreatorHelper.GetMongoTableBson(await MongoCollectionService.GetCollection<BsonDocument>(table, UniqueDatabaseName(database), paginationObject), table));
+                //TODO : Test the method solve the search button error 
+                return Json(await MongoCollectionService.GetCollectionFilterd<BsonDocument>(table, UniqueDatabaseName(database), filters, paginationObject));
 
             }
             catch (System.Exception ex)

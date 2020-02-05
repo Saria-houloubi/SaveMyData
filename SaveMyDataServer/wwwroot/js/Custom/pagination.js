@@ -76,14 +76,16 @@ function createPaginationListItem(li_clasess, a_classes, a_id, a_content, a_onCl
 //
 function basePaginationCallback(element, loadDataCallback) {
 
+    //The page number to get the user is wants to show
+    var pageNumberToGet = 1;
+    //Get the selected page number
+    pageNumberToGet = element.getAttribute(paginationOrderAtribute);
     //If the element is already selected just reload the data
     if (!element.classList.contains(paginationSelectedClass)) {
 
         //Get next and previos buttons
         var nextElement = document.getElementById(paginationNextId);
         var previousElement = document.getElementById(paginationPreviousId);
-        //The page number to get the user is wants to show
-        var pageNumberToGet = 1;
         //The elemant that was previously selected
         var prevSelectedElement = document.getElementsByClassName(paginationSelectedClass)[0];
         //Remove the selection from the old one
@@ -105,8 +107,6 @@ function basePaginationCallback(element, loadDataCallback) {
             prevSelectedElement.parentElement.previousElementSibling.firstChild.classList.add(paginationSelectedClass);
 
         } else {
-            //Get the selected page number
-            pageNumberToGet = element.getAttribute(paginationOrderAtribute);
             //add it to the element
             element.classList.add(paginationSelectedClass);
         }

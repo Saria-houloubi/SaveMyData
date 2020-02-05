@@ -6,8 +6,12 @@
     public static class ServerPaginationCount
     {
         /// <summary>
-        /// The amount
+        /// The amount records to get in a large page
         /// </summary>
         public const int LargePage = 100;
+        /// <summary>
+        /// The amount of records to get in a normal page
+        /// </summary>
+        public const int NormalPage = 20;
     }
 }

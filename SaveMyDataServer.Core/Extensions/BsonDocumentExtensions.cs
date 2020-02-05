@@ -25,7 +25,7 @@ namespace SaveMyDataServer.Core.Extensions
             {
                 if (item.Value.IsBsonDocument)
                 {
-                    namesAndValues = namesAndValues.Concat(GetKeyNameValue(item.Value.AsBsonDocument, $"{item.Name}.")).ToDictionary(x => x.Key, x => x.Value);
+                    namesAndValues = namesAndValues.Concat(GetKeyNameValue(item.Value.AsBsonDocument, $"{prepend}{item.Name}.")).ToDictionary(x => x.Key, x => x.Value);
                 }
                 else
                 {

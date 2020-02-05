@@ -8,7 +8,6 @@ using SaveMyDataServer.Core.IServices;
 using SaveMyDataServer.Database.Models.Users;
 using SaveMyDataServer.Database.Static;
 using SaveMyDataServer.ExteintionMethods;
-using SaveMyDataServer.Helpers;
 using SaveMyDataServer.SharedKernal.Models;
 using SaveMyDataServer.SharedKernal.Static;
 using System;
@@ -58,13 +57,18 @@ namespace SaveMyDataServer.Controllers
                                                         Builders<UserDatabaseModel>.Filter.Eq(item => item.UserId, new Guid(User.GetClaim(ClaimTypes.PrimarySid).Value))
                                                         , paginationModel);
 
-                return Json(HTMLCreatorHelper.CreateTable(databases.Select(item => new
+                return Json(new
                 {
-                    name = item.Name,
-                    creationData = item.CreationDateUTC.ToString("dd / MM / yyyy"),
-                    link = $"<a class='btn btn-outline-info' href='/datacenter/home?db={item.Name}'>Show</a>",
-                    deleteLink = $"<button class='btn btn-outline-danger' onClick='askConfirmation(this,\"{item.Id}\")'>Delete</button>"
-                }).ToList(), new string[] { "Name", "Creation data", "", "" }));
+                    rows = databases.Select(item => new string[]
+                           {
+                                item.Name,
+                                item.CreationDateUTC.ToString("dd / MM / yyyy"),
+                                $"<a class='btn btn-outline-info' href='/datacenter/home?db={item.Name}'>Show</a>",
+                                $"<button class='btn btn-outline-danger' onClick='askConfirmation(this,\"{item.Id}\")'>Delete</button>"
+                           }).ToList(),
+                    columns = new string[] { "Name", "Creation Data", "", "" }
+                });
+
             }
             catch (Exception ex)
             {

@@ -25,8 +25,9 @@ function getTableData(pageNumber) {
             "pagination": getPaginationObject(pageNumber, recordsCountInTable)
         },
         function (result) {
+            var table = CreateHTMLTable(result.rows, result.columns);
             //Set the table data
-            tableDiv.innerHTML = result;
+            tableDiv.firstChild.replaceWith(table);
         }
     ).fail(function (error) {
         setTopPageAlertMessage(error.responseText, 'alert-danger');

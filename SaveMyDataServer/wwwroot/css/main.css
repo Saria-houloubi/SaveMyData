@@ -1,7 +1,7 @@
-﻿@import url("Custom/footer.css");
+﻿@import url("Custom//colors.css");
+@import url("Custom/footer.css");
 @import url("Custom/pagination.css");
 @import url("Custom//grid.css");
-@import url("Custom//button.css");
 @import url("Custom//animations.css");
 
 html, body {
@@ -15,4 +15,9 @@ html, body {
     min-height: 100vh;
     padding-bottom: 30px;
 }
+
+table {
+    white-space: nowrap
+}
+
 
